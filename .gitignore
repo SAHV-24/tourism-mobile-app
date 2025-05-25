@@ -1,0 +1,128 @@
+# =============================================
+# VARIABLES DE ENTORNO Y CONFIGURACIÓN
+# =============================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+config.json
+config.local.json
+
+# =============================================
+# NODE.JS Y NPM
+# =============================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.npm
+.yarn-integrity
+*.tgz
+*.tar.gz
+
+# =============================================
+# LOGS
+# =============================================
+logs/
+*.log
+log/
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# =============================================
+# COVERAGE Y TESTING
+# =============================================
+coverage/
+.coverage/
+.nyc_output
+.jest/
+
+# =============================================
+# IONIC ESPECÍFICO
+# =============================================
+www/
+platforms/
+plugins/
+.sourcemaps/
+$IONIC_TMP/
+.ionic/
+
+# =============================================
+# ANGULAR / IONIC BUILD
+# =============================================
+dist/
+tmp/
+.tmp/
+.angular/
+.sass-cache/
+
+# =============================================
+# EDITORES E IDEs
+# =============================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# =============================================
+# SISTEMA OPERATIVO
+# =============================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# =============================================
+# CERTIFICADOS Y LLAVES
+# =============================================
+*.pem
+*.key
+*.crt
+*.cer
+ssl/
+
+# =============================================
+# UPLOADS Y ARCHIVOS TEMPORALES
+# =============================================
+uploads/
+temp/
+tmp/
+*.tmp
+
+# =============================================
+# CACHE
+# =============================================
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+
+# =============================================
+# DEPENDENCIAS ESPECÍFICAS
+# =============================================
+jspm_packages/
+web_modules/
+
+# =============================================
+# OTROS ARCHIVOS SENSIBLES
+# =============================================
+*.env*
+secrets.json
+.secrets
+credentials.json
