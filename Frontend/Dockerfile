@@ -2,14 +2,17 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+# Copiar los archivos de dependencias
+COPY package.json package-lock.json ./
 
-RUN npm install -g @ionic/cli && npm install
+# Instalar dependencias
+RUN npm install
 
+# Copiar el resto del código (opcional si usas volumen en docker-compose)
 COPY . .
 
-EXPOSE 8100
+# Exponer el puerto por defecto de Angular
+EXPOSE 4200
 
-ENV NODE_ENV=development
-
-CMD ["ionic", "serve", "--host=0.0.0.0", "--port=8100", "--disable-host-check"]
+# Comando por defecto: iniciar Angular en modo dev
+CMD ["npm", "run", "start"]
