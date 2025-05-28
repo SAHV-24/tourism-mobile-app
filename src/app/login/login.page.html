@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="login-container">
+    <h1 class="ion-text-center">Tourism Discovery</h1>
+
+    <form [formGroup]="loginForm" (ngSubmit)="submitForm()" novalidate>
+      <ion-item lines="full">
+        <ion-label position="floating">Email</ion-label>
+        <ion-input formControlName="email" type="email" required></ion-input>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="floating">Password</ion-label>
+        <ion-input formControlName="password" type="password" required></ion-input>
+      </ion-item>
+
+      <div class="ion-padding">
+        <ion-button type="submit" expand="block">Login</ion-button>
+      </div>
+
+      <div class="ion-padding">
+        <ion-button (click)="openSignupModal()" expand="block" fill="outline">Register</ion-button>
+      </div>
+    </form>
+  </div>
+</ion-content>

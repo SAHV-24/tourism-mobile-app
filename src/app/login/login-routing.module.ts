@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { FolderPage } from './folder.page';
+import { LoginPage } from './login.page';
 
 export const routes: Routes = [
   {
     path: '',
-    component: FolderPage
+    component: LoginPage
   }
 ];

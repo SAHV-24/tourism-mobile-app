@@ -1,20 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+// Re-export the routes from folder-routing.module.ts
+export { routes } from './folder-routing.module';
 
-import { IonicModule } from '@ionic/angular';
-
-import { FolderPageRoutingModule } from './folder-routing.module';
-
-import { FolderPage } from './folder.page';
-
-@NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    FolderPageRoutingModule
-  ],
-  declarations: [FolderPage]
-})
-export class FolderPageModule {}
+// Export the FolderPage for direct import
+export { FolderPage } from './folder.page';
