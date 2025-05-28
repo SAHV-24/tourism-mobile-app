@@ -2,6 +2,93 @@ const express = require('express');
 const router = express.Router();
 const Plato = require('../models/Plato');
 
+/**
+ * @swagger
+ * tags:
+ *   name: Platos
+ *   description: Endpoints para platos
+ *
+ * /api/platos:
+ *   get:
+ *     summary: Obtener todos los platos
+ *     tags: [Platos]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de platos
+ *
+ * /api/platos/{id}:
+ *   get:
+ *     summary: Obtener plato por ID
+ *     tags: [Platos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del plato
+ *     responses:
+ *       200:
+ *         description: Plato encontrado
+ *       404:
+ *         description: Plato no encontrado
+ *
+ * /api/platos/sitio/{sitioId}:
+ *   get:
+ *     summary: Obtener platos por sitio
+ *     tags: [Platos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: sitioId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del sitio
+ *     responses:
+ *       200:
+ *         description: Lista de platos del sitio
+ *
+ * /api/platos/ciudad/{ciudadId}:
+ *   get:
+ *     summary: Obtener platos por ciudad
+ *     tags: [Platos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: ciudadId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID de la ciudad
+ *     responses:
+ *       200:
+ *         description: Lista de platos de la ciudad
+ *
+ * /api/platos/pais/{paisId}:
+ *   get:
+ *     summary: Obtener platos por país
+ *     tags: [Platos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: paisId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del país
+ *     responses:
+ *       200:
+ *         description: Lista de platos del país
+ */
+
 // GET - Obtener todos los platos
 router.get('/', async (req, res) => {
   try {

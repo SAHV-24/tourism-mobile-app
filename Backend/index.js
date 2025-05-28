@@ -3,10 +3,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const auth = require("./middleware/auth");
+const swaggerUi = require("swagger-ui-express");
+const swaggerJSDoc = require("swagger-jsdoc");
 
 const app = express();
 const PORT = process.env.PORT || 8080;
-const JWT_SECRET = process.env.JWT_SECRET_KEY;
 
 // Middleware
 app.use(cors());
@@ -48,6 +49,50 @@ app.get("/", (req, res) => {
     ],
   });
 });
+
+// Configuración de Swagger
+const swaggerDefinition = {
+  openapi: "3.0.0",
+  info: {
+    title: "Tourism REST API",
+    version: "1.0.0",
+    description: "Documentación de la API para el proyecto de turismo",
+  },
+  tags: [
+    { name: "Usuarios", description: "Endpoints de autenticación y gestión de usuarios" },
+    { name: "Paises", description: "Endpoints para países" },
+    { name: "Ciudades", description: "Endpoints para ciudades" },
+    { name: "Sitios", description: "Endpoints para sitios" },
+    { name: "Platos", description: "Endpoints para platos" },
+    { name: "Famosos", description: "Endpoints para famosos" },
+    { name: "Tags", description: "Endpoints para tags" },
+    { name: "Visitas", description: "Endpoints para visitas" }
+  ],
+  servers: [
+    {
+      url: "http://localhost:8080",
+      description: "Servidor local",
+    },
+  ],
+  components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+      },
+    },
+  },
+  security: [{ bearerAuth: [] }],
+};
+
+const options = {
+  swaggerDefinition,
+  apis: ["./routes/*.js"],
+};
+
+const swaggerSpec = swaggerJSDoc(options);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app
   .listen(PORT, () => {

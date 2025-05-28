@@ -2,6 +2,126 @@ const express = require('express');
 const router = express.Router();
 const Tag = require('../models/Tag');
 
+/**
+ * @swagger
+ * tags:
+ *   name: Tags
+ *   description: Endpoints para tags
+ *
+ * /api/tags:
+ *   get:
+ *     summary: Obtener todos los tags
+ *     tags: [Tags]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de tags
+ *   post:
+ *     summary: Crear un nuevo tag
+ *     tags: [Tags]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               usuario:
+ *                 type: string
+ *               famoso:
+ *                 type: string
+ *               latitud:
+ *                 type: number
+ *               longitud:
+ *                 type: number
+ *               fotoUrl:
+ *                 type: string
+ *               comentario:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Tag creado
+ *
+ * /api/tags/{id}:
+ *   get:
+ *     summary: Obtener tag por ID
+ *     tags: [Tags]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del tag
+ *     responses:
+ *       200:
+ *         description: Tag encontrado
+ *       404:
+ *         description: Tag no encontrado
+ *   put:
+ *     summary: Actualizar tag
+ *     tags: [Tags]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del tag
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *     responses:
+ *       200:
+ *         description: Tag actualizado
+ *       404:
+ *         description: Tag no encontrado
+ *   delete:
+ *     summary: Eliminar tag
+ *     tags: [Tags]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del tag
+ *     responses:
+ *       200:
+ *         description: Tag eliminado correctamente
+ *       404:
+ *         description: Tag no encontrado
+ *
+ * /api/tags/usuario/{usuarioId}:
+ *   get:
+ *     summary: Obtener tags por usuario
+ *     tags: [Tags]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: usuarioId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del usuario
+ *     responses:
+ *       200:
+ *         description: Lista de tags del usuario
+ */
+
 // GET - Obtener todos los tags
 router.get('/', async (req, res) => {
   try {

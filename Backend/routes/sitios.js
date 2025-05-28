@@ -3,6 +3,122 @@ const router = express.Router();
 const Sitio = require("../models/Sitio");
 const admin = require("../middleware/admin");
 
+/**
+ * @swagger
+ * tags:
+ *   name: Sitios
+ *   description: Endpoints para sitios
+ *
+ * /api/sitios:
+ *   get:
+ *     summary: Obtener todos los sitios
+ *     tags: [Sitios]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de sitios
+ *   post:
+ *     summary: Crear un nuevo sitio (solo admin)
+ *     tags: [Sitios]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *               ubicacion:
+ *                 type: string
+ *               ciudad:
+ *                 type: string
+ *               tipoSitio:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Sitio creado
+ *
+ * /api/sitios/{id}:
+ *   get:
+ *     summary: Obtener sitio por ID
+ *     tags: [Sitios]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del sitio
+ *     responses:
+ *       200:
+ *         description: Sitio encontrado
+ *       404:
+ *         description: Sitio no encontrado
+ *   put:
+ *     summary: Actualizar sitio (solo admin)
+ *     tags: [Sitios]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del sitio
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *     responses:
+ *       200:
+ *         description: Sitio actualizado
+ *       404:
+ *         description: Sitio no encontrado
+ *   delete:
+ *     summary: Eliminar sitio (solo admin)
+ *     tags: [Sitios]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del sitio
+ *     responses:
+ *       200:
+ *         description: Sitio eliminado correctamente
+ *       404:
+ *         description: Sitio no encontrado
+ *
+ * /api/sitios/pais/{paisId}:
+ *   get:
+ *     summary: Obtener sitios por país
+ *     tags: [Sitios]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: paisId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del país
+ *     responses:
+ *       200:
+ *         description: Lista de sitios del país
+ */
+
 // GET - Obtener todos los sitios
 router.get("/", async (req, res) => {
   try {

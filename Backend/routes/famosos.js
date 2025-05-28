@@ -3,6 +3,124 @@ const router = express.Router();
 const Famoso = require("../models/Famoso");
 const admin = require("../middleware/admin");
 
+/**
+ * @swagger
+ * tags:
+ *   name: Famosos
+ *   description: Endpoints para famosos
+ *
+ * /api/famosos:
+ *   get:
+ *     summary: Obtener todos los famosos
+ *     tags: [Famosos]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de famosos
+ *   post:
+ *     summary: Crear un famoso (solo admin)
+ *     tags: [Famosos]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *               ciudadNacimiento:
+ *                 type: string
+ *               actividad:
+ *                 type: string
+ *               foto:
+ *                 type: string
+ *               descripcion:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Famoso creado
+ *
+ * /api/famosos/{id}:
+ *   get:
+ *     summary: Obtener famoso por ID
+ *     tags: [Famosos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del famoso
+ *     responses:
+ *       200:
+ *         description: Famoso encontrado
+ *       404:
+ *         description: Famoso no encontrado
+ *   put:
+ *     summary: Actualizar famoso (solo admin)
+ *     tags: [Famosos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del famoso
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *     responses:
+ *       200:
+ *         description: Famoso actualizado
+ *       404:
+ *         description: Famoso no encontrado
+ *   delete:
+ *     summary: Eliminar famoso (solo admin)
+ *     tags: [Famosos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del famoso
+ *     responses:
+ *       200:
+ *         description: Famoso eliminado
+ *       404:
+ *         description: Famoso no encontrado
+ *
+ * /api/famosos/pais/{paisId}:
+ *   get:
+ *     summary: Obtener famosos por país
+ *     tags: [Famosos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: paisId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del país
+ *     responses:
+ *       200:
+ *         description: Lista de famosos del país
+ */
+
 // GET - Obtener todos los famosos
 router.get("/", async (req, res) => {
   try {
