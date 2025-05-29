@@ -9,11 +9,13 @@ A tourism platform for travelers to discover, explore, and share experiences in 
 Monolithic architecture with separated frontend and backend services:
 
 ### Backend
+
 - **Technology Stack**: Node.js, Express.js, MongoDB Atlas, Mongoose
 - **Location**: `/Backend/`
 - **Purpose**: RESTful API providing data management for countries, cities, tourist sites, dishes, famous people, users, tags, and visits
 
 ### Frontend
+
 - **Technology Stack**: Ionic, Angular, Capacitor
 - **Location**: `/Frontend/`
 - **Purpose**: Mobile application with cross-platform capabilities for iOS and Android
@@ -48,6 +50,7 @@ App-Posts/
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js 14+
 - MongoDB Atlas account
 - Ionic CLI
@@ -55,24 +58,30 @@ App-Posts/
 ### Setup Instructions
 
 #### 1. Backend Setup
+
 ```bash
 cd Backend
 npm install
 ```
 
 Create a `.env` file in the Backend directory:
+
 ```
 MONGO_ATLAS_URI=mongodb+srv://your-connection-string
-PORT=3000
+PORT=8080
+NODE_ENV=development
+JWT_SECRET_KEY=your-very-secret-key
 ```
 
+_If it is the FIRST TIME USING the API_
 Seed the database and start the server:
+
 ```bash
 npm run seed
-npm run dev
 ```
 
 #### 2. Frontend Setup
+
 ```bash
 cd Frontend
 npm install
@@ -84,6 +93,7 @@ ionic serve
 Both backend and frontend must be running simultaneously:
 
 1. **Start Backend** (Terminal 1):
+
    ```bash
    cd Backend
    npm run dev
@@ -98,6 +108,7 @@ Both backend and frontend must be running simultaneously:
 ## Data Model
 
 The application manages data for three countries (Colombia, Costa Rica, Guatemala) with:
+
 - 30 cities (10 per country)
 - 30 tourist sites (10 per country)
 - Traditional dishes by location

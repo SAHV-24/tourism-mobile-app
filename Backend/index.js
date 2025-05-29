@@ -38,6 +38,7 @@ app.get("/", (req, res) => {
   res.json({
     mensaje: "🚀 API de Proyecto Móviles 2025-01 funcionando correctamente",
     endpoints: [
+      "/api-docs - Documentación de Swagger de la API",
       "/api/paises",
       "/api/ciudades",
       "/api/sitios",
@@ -59,14 +60,17 @@ const swaggerDefinition = {
     description: "Documentación de la API para el proyecto de turismo",
   },
   tags: [
-    { name: "Usuarios", description: "Endpoints de autenticación y gestión de usuarios" },
+    {
+      name: "Usuarios",
+      description: "Endpoints de autenticación y gestión de usuarios",
+    },
     { name: "Paises", description: "Endpoints para países" },
     { name: "Ciudades", description: "Endpoints para ciudades" },
     { name: "Sitios", description: "Endpoints para sitios" },
     { name: "Platos", description: "Endpoints para platos" },
     { name: "Famosos", description: "Endpoints para famosos" },
     { name: "Tags", description: "Endpoints para tags" },
-    { name: "Visitas", description: "Endpoints para visitas" }
+    { name: "Visitas", description: "Endpoints para visitas" },
   ],
   servers: [
     {

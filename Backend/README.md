@@ -8,6 +8,25 @@ A RESTful API developed with Express.js and Mongoose for the Mobile Development 
 - MongoDB Atlas account
 - npm or yarn
 
+## Running with Docker
+
+To run the backend image locally, you must create a `.env` file in the root of the project (or where you run the container) with the following environment variables:
+
+```
+NODE_ENV=development
+PORT=8080
+MONGO_ATLAS_URI=your-mongodb-atlas-uri
+JWT_SECRET_KEY=your-very-secret-key
+```
+
+- **JWT_SECRET_KEY** must be a strong, random string. It is used to sign and verify JWT tokens for authentication. Do not use simple or predictable values. Example: `2f8e7c1a-4b3d-4e2a-9c7b-1a6e5d2f4b8c`
+
+Then, run the backend image with:
+
+```bash
+docker run -p 8080:8080 -d --env-file .env sergioherrera24/mobile-backend:latest
+```
+
 ## Installation
 
 1. Install dependencies:
@@ -19,6 +38,8 @@ npm install
 ```
 MONGO_ATLAS_URI=mongodb+srv://your-connection-string
 PORT=8080
+NODE_ENV=development
+JWT_SECRET_KEY=your-very-secret-key
 ```
 
 3. Seed the database:
@@ -34,6 +55,36 @@ npm run dev
 # Production mode
 npm start
 ```
+
+## Project Structure
+
+```
+Backend/
+├── models/          # Mongoose models
+├── routes/          # API routes
+├── index.js         # Main server file
+├── seed.js          # Database seeding script
+├── package.json
+└── .env            # Environment variables
+```
+
+## Technology Stack
+
+- Express.js: Web framework for Node.js
+- Mongoose: MongoDB object modeling
+- MongoDB Atlas: Cloud database
+- CORS: Cross-origin resource sharing
+- dotenv: Environment variable management
+
+## API Documentation (Swagger)
+
+The API is fully documented using Swagger (OpenAPI 3.0).
+
+- After starting the backend, access the interactive documentation at:
+
+  [http://localhost:8080/api-docs](http://localhost:8080/api-docs)
+
+You can explore all endpoints, see required parameters, try requests, and view example responses directly from the browser.
 
 ## API Endpoints
 
@@ -67,10 +118,10 @@ npm start
 ### Users (CRUD)
 - `GET /api/usuarios` - Get all users
 - `GET /api/usuarios/:id` - Get user by ID
-- `POST /api/usuarios` - Create new user
+- `POST /api/usuarios/signup` - Register new user
+- `POST /api/usuarios/login` - Authenticate user
 - `PUT /api/usuarios/:id` - Update user
 - `DELETE /api/usuarios/:id` - Delete user
-- `POST /api/usuarios/login` - Authenticate user
 
 ### Tags (CRUD)
 - `GET /api/tags` - Get all tags
@@ -101,22 +152,3 @@ The seed script creates:
 - Administrator: username `admin`, password `admin123`
 - Default User: username `juan`, password `123456`
 
-## Project Structure
-
-```
-Backend/
-├── models/          # Mongoose models
-├── routes/          # API routes
-├── index.js         # Main server file
-├── seed.js          # Database seeding script
-├── package.json
-└── .env            # Environment variables
-```
-
-## Technology Stack
-
-- Express.js: Web framework for Node.js
-- Mongoose: MongoDB object modeling
-- MongoDB Atlas: Cloud database
-- CORS: Cross-origin resource sharing
-- dotenv: Environment variable management
