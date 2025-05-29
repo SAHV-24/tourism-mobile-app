@@ -74,8 +74,8 @@ const swaggerDefinition = {
   ],
   servers: [
     {
-      url: "http://localhost:8080",
-      description: "Servidor local",
+      url: `http://localhost:${PORT}`,
+      description: "Servidor de desarrollo local",
     },
   ],
   components: {
