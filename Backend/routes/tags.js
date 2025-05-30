@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Tag = require('../models/Tag');
+const multer = require('multer');
+const cloudinary = require('../config/cloudinary');
+const upload = multer({ dest: 'uploads/' });
 
 /**
  * @swagger
@@ -25,7 +28,7 @@ const Tag = require('../models/Tag');
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
@@ -37,8 +40,10 @@ const Tag = require('../models/Tag');
  *                 type: number
  *               longitud:
  *                 type: number
- *               fotoUrl:
+ *               foto:
  *                 type: string
+ *                 format: binary
+ *                 description: Imagen a subir (opcional, si no se envía, se debe enviar fotoUrl)
  *               comentario:
  *                 type: string
  *     responses:
@@ -78,9 +83,24 @@ const Tag = require('../models/Tag');
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
+ *             properties:
+ *               usuario:
+ *                 type: string
+ *               famoso:
+ *                 type: string
+ *               latitud:
+ *                 type: number
+ *               longitud:
+ *                 type: number
+ *               foto:
+ *                 type: string
+ *                 format: binary
+ *                 description: Imagen a subir (opcional, si no se envía, se debe enviar fotoUrl)
+ *               comentario:
+ *                 type: string
  *     responses:
  *       200:
  *         description: Tag actualizado
@@ -195,9 +215,19 @@ router.get('/usuario/:usuarioId', async (req, res) => {
 });
 
 // POST - Crear nuevo tag
-router.post('/', async (req, res) => {
+router.post('/', upload.single('foto'), async (req, res) => {
   try {
-    const nuevoTag = new Tag(req.body);
+    let fotoUrl = req.body.fotoUrl;
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'tags'
+      });
+      fotoUrl = result.secure_url;
+    }
+    const nuevoTag = new Tag({
+      ...req.body,
+      fotoUrl
+    });
     const tagGuardado = await nuevoTag.save();
     const tagCompleto = await Tag.findById(tagGuardado._id)
       .populate('usuario', 'nombre apellido')
@@ -220,11 +250,18 @@ router.post('/', async (req, res) => {
 });
 
 // PUT - Actualizar tag
-router.put('/:id', async (req, res) => {
+router.put('/:id', upload.single('foto'), async (req, res) => {
   try {
+    let updateData = { ...req.body };
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'tags'
+      });
+      updateData.fotoUrl = result.secure_url;
+    }
     const tagActualizado = await Tag.findByIdAndUpdate(
-      req.params.id, 
-      req.body, 
+      req.params.id,
+      updateData,
       { new: true, runValidators: true }
     )
       .populate('usuario', 'nombre apellido')
@@ -240,7 +277,6 @@ router.put('/:id', async (req, res) => {
           }
         }
       });
-    
     if (!tagActualizado) {
       return res.status(404).json({ mensaje: 'Tag no encontrado' });
     }
