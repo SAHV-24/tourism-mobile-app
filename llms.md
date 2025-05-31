@@ -1,3 +1,45 @@
+# FRONTEND
+
+## Ionic/Angular App Features
+
+- **Modern Home Page (Carousel):**
+  - Swiper-based carousel with cards for each query/feature.
+  - Each card includes a title, description, emoji, and navigation button.
+  - Responsive and visually appealing design using Ionic components and custom SCSS.
+
+- **Query Result Pages:**
+  - Each advanced query has its own standalone Angular component and route:
+    - Top 10 Most Visited Sites (by country)
+    - Most Tagged Famous People
+    - Users with Most Visits
+    - Dishes by Unique Users (with dynamic user count input)
+    - Dishes by Country & City (with two selects)
+  - All pages use strict TypeScript interfaces for data models.
+  - All pages use modern Angular patterns (standalone components, strict typing, modular services).
+
+- **Dynamic Selects and Filtering:**
+  - Country and city selects use CountryService and CityService.
+  - When a country is selected, cities are loaded dynamically.
+  - QueryService fetches data based on selected filters (country/city/user count).
+
+- **UI/UX Enhancements:**
+  - Consistent toolbar on all pages.
+  - Avatars, emojis, and ranking icons for visual clarity.
+  - Loading spinners and clear empty-state messages.
+  - Input fields are styled and disabled during loading.
+  - All lists and cards are responsive and mobile-friendly.
+
+- **Routing:**
+  - Each query result page is registered as a route (e.g., `/queries/top-sites`, `/queries/dishes-by-location`).
+  - Home carousel links to each query page.
+
+- **Error Handling:**
+  - All API calls handle errors gracefully and show user-friendly messages.
+
+- **Strict Typing & Best Practices:**
+  - All services and models use strict TypeScript interfaces.
+  - Standalone components import only the required Ionic modules (no global IonicModule).
+  - Code is modular, maintainable, and ready for further extension.
 
 # BACKEND: 
 

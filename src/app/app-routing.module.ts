@@ -9,6 +9,9 @@ import { ADMIN_ROUTES } from './admin/admin-routing';
 import { TopSitiosComponent } from './queries/top-sitios.component';
 import { PlatosPorUbicacionComponent } from './queries/platos-por-ubicacion.component';
 import { USER_ROUTES } from './user/user-routing';
+import { TagListComponent } from './user/tags/tag-list.component';
+import { MyTagsComponent } from './user/tags/my-tags.component';
+import { CreateTagComponent } from './user/tags/create-tag/create-tag.component';
 
 export const routes: Routes = [
   {
@@ -68,6 +71,12 @@ export const routes: Routes = [
     path: 'queries/dishes-by-location',
     component: PlatosPorUbicacionComponent,
   },
+  // Rutas de gestión de tags (todas públicas, puedes agregar guards si lo deseas)
+  { path: 'tags', component: TagListComponent },
+  { path: 'tags/my-tags', component: MyTagsComponent },
+  { path: 'tags/create', component: CreateTagComponent },
+  { path: 'tag/:id', loadComponent: () => import('./user/tags/tag-by-id/tag-by-id.component').then(m => m.TagByIdComponent) },
+
   ...ADMIN_ROUTES,
   ...USER_ROUTES,
 ];

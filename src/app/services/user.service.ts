@@ -27,7 +27,7 @@ export class UserService extends BaseService<User> {
   /**
    * Change user password
    */
-  changePassword(userId: number, oldPassword: string, newPassword: string): Observable<any> {
+  changePassword(userId: string, oldPassword: string, newPassword: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/${this.endpoint}/${userId}/change-password`, {
       oldPassword,
       newPassword

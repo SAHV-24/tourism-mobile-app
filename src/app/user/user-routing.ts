@@ -4,6 +4,10 @@ import {SitesComponent} from "./sites/sites.component";
 import {SitesListComponent} from "./sites/sites-list.component";
 import {FavoritesComponent} from "./favorites/favorites.component";
 import {RoutesComponent} from "./routes/routes.component";
+import {TagListComponent} from "./tags/tag-list.component";
+import {MyTagsComponent} from "./tags/my-tags.component";
+import {TagPageComponent as TagCreateComponent} from "./tags/tag-page/tag-page.component";
+import { AuthGuard } from "../services";
 
 export const USER_ROUTES: Routes = [
   {

@@ -17,8 +17,8 @@ export class TagService extends BaseService<Tag> {
   /**
    * Get tags by user id
    */
-  getByUserId(userId: number): Observable<Tag[]> {
-    return this.http.get<Tag[]>(`${this.apiUrl}/${this.endpoint}/user/${userId}`).pipe(
+  getByUserId(userId: string): Observable<Tag[]> {
+    return this.http.get<Tag[]>(`${this.apiUrl}/${this.endpoint}/usuario/${userId}`).pipe(
       catchError(this.handleError<Tag[]>('getByUserId', []))
     );
   }
@@ -26,8 +26,8 @@ export class TagService extends BaseService<Tag> {
   /**
    * Get tags by famous id
    */
-  getByFamousId(famousId: number): Observable<Tag[]> {
-    return this.http.get<Tag[]>(`${this.apiUrl}/${this.endpoint}/famous/${famousId}`).pipe(
+  getByFamousId(famousId: string): Observable<Tag[]> {
+    return this.http.get<Tag[]>(`${this.apiUrl}/${this.endpoint}/famoso/${famousId}`).pipe(
       catchError(this.handleError<Tag[]>('getByFamousId', []))
     );
   }

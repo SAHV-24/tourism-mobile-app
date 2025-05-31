@@ -17,12 +17,20 @@ export class AppComponent {
   public appPages = [
     { title: 'Home', url: '/folder/home', icon: 'home' },
     { title: 'Admin', url: '/admin', icon: 'settings' },
+    { title: 'Tags', url: '/tags', icon: 'pricetag' },
     { title: 'Sites', url: '/user/sites', icon: 'location' },
     { title: 'Favorites', url: '/user/favorites', icon: 'heart' },
     { title: 'Routes', url: '/user/routes', icon: 'map' },
   ];
 
   constructor(public authService: AuthService) {}
+
+  public get filteredAppPages() {
+    if (this.authService.isAdmin()) {
+      return this.appPages;
+    }
+    return this.appPages.filter(page => page.url !== '/admin');
+  }
 
   logout() {
     this.authService.logout();

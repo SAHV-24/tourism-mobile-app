@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import Swiper from 'swiper';
+import { addIcons } from 'ionicons';
 var swiper = new Swiper('.mySwiper', {
   navigation: {
     nextEl: '.swiper-button-next',
@@ -56,7 +57,9 @@ export class FolderPage implements OnInit {
     },
   ];
 
-  constructor() {}
+  constructor() {
+    addIcons({arrowForwardOutline: 'arrow-forward-outline', arrowBackOutline: 'arrow-back-outline'});
+  }
 
   ngOnInit() {
     this.folder = this.activatedRoute.snapshot.paramMap.get('id') as string;

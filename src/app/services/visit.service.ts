@@ -17,7 +17,7 @@ export class VisitService extends BaseService<Visit> {
   /**
    * Get visits by user id
    */
-  getByUserId(userId: number): Observable<Visit[]> {
+  getByUserId(userId: string): Observable<Visit[]> {
     return this.http.get<Visit[]>(`${this.apiUrl}/${this.endpoint}/user/${userId}`).pipe(
       catchError(this.handleError<Visit[]>('getByUserId', []))
     );
@@ -26,7 +26,7 @@ export class VisitService extends BaseService<Visit> {
   /**
    * Get visits by site id
    */
-  getBySiteId(siteId: number): Observable<Visit[]> {
+  getBySiteId(siteId: string): Observable<Visit[]> {
     return this.http.get<Visit[]>(`${this.apiUrl}/${this.endpoint}/site/${siteId}`).pipe(
       catchError(this.handleError<Visit[]>('getBySiteId', []))
     );

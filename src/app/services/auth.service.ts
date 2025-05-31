@@ -1,7 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subject, catchError, map, of, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subject,
+  catchError,
+  map,
+  of,
+  tap,
+} from 'rxjs';
 import { environment } from '../../environments/environment';
 import { User } from '../models/user.model';
 
@@ -16,20 +24,23 @@ export interface SignupRequest {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private apiUrl = environment.apiUrl;
-  private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasToken());
-  private usernameSubject = new BehaviorSubject<string>(this.getUsername() || '');
-  private userIdSubject = new BehaviorSubject<number | null>(this.getUserId());
-  private userRoleSubject = new BehaviorSubject<string>(this.getUserRole() || '');
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(
+    this.hasToken()
+  );
+  private usernameSubject = new BehaviorSubject<string>(
+    this.getUsername() || ''
+  );
+  private userIdSubject = new BehaviorSubject<string | null>(this.getUserId());
+  private userRoleSubject = new BehaviorSubject<string>(
+    this.getUserRole() || ''
+  );
   private logoutEvent = new Subject<void>();
 
-  constructor(
-    private router: Router,
-    private http: HttpClient
-  ) {}
+  constructor(private router: Router, private http: HttpClient) {}
 
   /**
    * Check if user is authenticated
@@ -62,9 +73,8 @@ export class AuthService {
   /**
    * Get user ID from localStorage
    */
-  private getUserId(): number | null {
-    const userId = localStorage.getItem('userId');
-    return userId ? parseInt(userId, 10) : null;
+  private getUserId(): string | null {
+    return localStorage.getItem('userId');
   }
 
   /**
@@ -84,7 +94,7 @@ export class AuthService {
   /**
    * Get user ID as Observable
    */
-  getUserIdObservable(): Observable<number | null> {
+  getUserIdObservable(): Observable<string | null> {
     return this.userIdSubject.asObservable();
   }
 
@@ -112,7 +122,7 @@ export class AuthService {
   /**
    * Get current user ID value
    */
-  get currentUserId(): number | null {
+  get currentUserId(): string | null {
     return this.userIdSubject.value;
   }
 
@@ -127,68 +137,80 @@ export class AuthService {
    * Login with username and password
    */
   login(username: string, password: string): Observable<boolean> {
-    return this.http.post<{token: string, mensaje: string}>(`${this.apiUrl}/usuarios/login`, { usuario: username, contraseña: password }).pipe(
-      tap(response => {
-        if (response && response.token) {
-          // Extract user information from JWT token
-          const token = response.token;
-          const tokenParts = token.split('.');
-          if (tokenParts.length === 3) {
-            try {
-              const payload = JSON.parse(atob(tokenParts[1]));
-              const userId = payload._id;
-              const userUsername = payload.usuario;
-              const userRole = payload.rol;
+    return this.http
+      .post<{ token: string; mensaje: string }>(
+        `${this.apiUrl}/usuarios/login`,
+        { usuario: username, contraseña: password }
+      )
+      .pipe(
+        tap((response) => {
+          if (response && response.token) {
+            // Extract user information from JWT token
+            const token = response.token;
+            const tokenParts = token.split('.');
+            if (tokenParts.length === 3) {
+              try {
+                const payload = JSON.parse(atob(tokenParts[1]));
+                const userId = payload._id;
+                const userUsername = payload.usuario;
+                const userRole = payload.rol;
 
-              localStorage.setItem('isLoggedIn', 'true');
-              localStorage.setItem('token', response.token);
-              localStorage.setItem('username', userUsername || username);
-              localStorage.setItem('userId', userId);
-              localStorage.setItem('userRole', userRole);
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('token', response.token);
+                localStorage.setItem('username', userUsername || username);
+                localStorage.setItem('userId', userId);
+                localStorage.setItem('userRole', userRole);
 
-              this.isAuthenticatedSubject.next(true);
-              this.usernameSubject.next(userUsername || username);
-              this.userIdSubject.next(userId);
-              this.userRoleSubject.next(userRole);
-            } catch (e) {
-              console.error('Error parsing JWT token:', e);
-              return;
+                this.isAuthenticatedSubject.next(true);
+                this.usernameSubject.next(userUsername || username);
+                this.userIdSubject.next(userId);
+                this.userRoleSubject.next(userRole);
+              } catch (e) {
+                console.error('Error parsing JWT token:', e);
+                return;
+              }
             }
           }
-        }
-      }),
-      map(response => !!response.token),
-      catchError(error => {
-        console.error('Login failed:', error);
-        return of(false);
-      })
-    );
+        }),
+        map((response) => !!response.token),
+        catchError((error) => {
+          console.error('Login failed:', error);
+          return of(false);
+        })
+      );
   }
 
   /**
    * Register a new user (legacy method)
    */
   register(user: Partial<User>): Observable<boolean> {
-    return this.http.post<{success: boolean, user: User}>(`${this.apiUrl}/auth/register`, user).pipe(
-      map(response => response.success),
-      catchError(error => {
-        console.error('Registration failed:', error);
-        return of(false);
-      })
-    );
+    return this.http
+      .post<{ success: boolean; user: User }>(
+        `${this.apiUrl}/auth/register`,
+        user
+      )
+      .pipe(
+        map((response) => response.success),
+        catchError((error) => {
+          console.error('Registration failed:', error);
+          return of(false);
+        })
+      );
   }
 
   /**
    * Sign up a new user using the new endpoint
    */
   signup(signupData: SignupRequest): Observable<boolean> {
-    return this.http.post<any>(`${this.apiUrl}/usuarios/signup`, signupData).pipe(
-      map(response => !!response),
-      catchError(error => {
-        console.error('Signup failed:', error);
-        return of(false);
-      })
-    );
+    return this.http
+      .post<any>(`${this.apiUrl}/usuarios/signup`, signupData)
+      .pipe(
+        map((response) => !!response),
+        catchError((error) => {
+          console.error('Signup failed:', error);
+          return of(false);
+        })
+      );
   }
 
   /**
@@ -227,5 +249,15 @@ export class AuthService {
    */
   getToken(): string | null {
     return localStorage.getItem('token');
+  }
+
+  /**
+   * Returns true if the current user is admin
+   */
+  isAdmin(): boolean {
+    return (
+      this.getUserRole()?.toLowerCase() === 'administrador' ||
+      this.currentUserRole.toLowerCase() === 'administrador'
+    );
   }
 }
