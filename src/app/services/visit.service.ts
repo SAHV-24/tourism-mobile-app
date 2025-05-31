@@ -8,7 +8,7 @@ import { Observable, catchError } from 'rxjs';
   providedIn: 'root'
 })
 export class VisitService extends BaseService<Visit> {
-  protected endpoint = 'visits';
+  protected endpoint = 'visitas';
 
   constructor(protected override http: HttpClient) {
     super(http);

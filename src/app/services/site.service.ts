@@ -9,7 +9,7 @@ import { SiteCategoryEnum } from '../models/enums';
   providedIn: 'root'
 })
 export class SiteService extends BaseService<Site> {
-  protected endpoint = 'sites';
+  protected endpoint = 'sitios';
 
   constructor(protected override http: HttpClient) {
     super(http);

@@ -10,7 +10,8 @@ import { AuthService } from '../../services';
   selector: 'app-country-admin',
   standalone: true,
   imports: [...COMMON_IMPORTS],
-  templateUrl: './country-admin.component.html'
+  templateUrl: './country-admin.component.html',
+  styleUrls: ['./country-admin.component.scss']
 })
 export class CountryAdminComponent extends BaseAdminComponent<Country> {
   constructor(

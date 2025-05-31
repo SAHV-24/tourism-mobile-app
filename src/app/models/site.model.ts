@@ -1,10 +1,20 @@
-import { SiteCategoryEnum } from './enums';
-
 export interface Site {
-  idSite: number;
-  idCity: number; // Foreign key to City
-  name: string;
-  category: SiteCategoryEnum;
-  latitude: number;
-  longitude: number;
+  _id: string;
+  nombre: string;
+  ubicacion: string;
+  ciudad: {
+    _id: string;
+    nombre: string;
+    pais: {
+      _id: string;
+      nombre: string;
+    };
+    __v?: number;
+    createdAt?: string;
+    updatedAt?: string;
+  };
+  tipoSitio: string;
+  __v?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }

@@ -8,7 +8,7 @@ import { Observable, catchError } from 'rxjs';
   providedIn: 'root'
 })
 export class DishService extends BaseService<Dish> {
-  protected endpoint = 'dishes';
+  protected endpoint = 'platos';
 
   constructor(protected override http: HttpClient) {
     super(http);

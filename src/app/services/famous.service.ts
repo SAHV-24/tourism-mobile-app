@@ -9,7 +9,7 @@ import { ActivityEnum } from '../models/enums';
   providedIn: 'root'
 })
 export class FamousService extends BaseService<Famous> {
-  protected endpoint = 'famous';
+  protected endpoint = 'famosos';
 
   constructor(protected override http: HttpClient) {
     super(http);

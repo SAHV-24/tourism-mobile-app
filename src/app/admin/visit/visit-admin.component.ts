@@ -14,7 +14,8 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-visit-admin',
   standalone: true,
   imports: [...COMMON_IMPORTS],
-  templateUrl: './visit-admin.component.html'
+  templateUrl: './visit-admin.component.html',
+  styleUrls: ['./visit-admin.component.scss']
 })
 export class VisitAdminComponent extends BaseAdminComponent<Visit> implements OnInit {
   users: User[] = [];
@@ -64,14 +65,14 @@ export class VisitAdminComponent extends BaseAdminComponent<Visit> implements On
     });
   }
 
-  getUserName(userId: number): string {
-    const user = this.users.find(u => u.idUser === userId);
-    return user ? user.name : 'Unknown';
+  getUserName(userId: string): string {
+    const user = this.users.find(u => u._id === userId);
+    return user ? user.nombre : 'Unknown';
   }
 
-  getSiteName(siteId: number): string {
-    const site = this.sites.find(s => s.idSite === siteId);
-    return site ? site.name : 'Unknown';
+  getSiteName(siteId: string): string {
+    const site = this.sites.find(s => s._id === siteId);
+    return site ? site.nombre : 'Unknown';
   }
 
   protected buildForm(): FormGroup {
@@ -80,27 +81,23 @@ export class VisitAdminComponent extends BaseAdminComponent<Visit> implements On
       idSite: [null, [Validators.required]],
       latitude: [null, [Validators.required]],
       longitude: [null, [Validators.required]],
-      date: [new Date().toISOString().split('T')[0], [Validators.required]],
-      time: [new Date().toTimeString().split(' ')[0].substring(0, 5), [Validators.required]]
+      date: [new Date().toISOString().split('T')[0], [Validators.required]]
     });
   }
 
   protected populateForm(item: Visit): void {
-    const date = item.date instanceof Date
-      ? item.date.toISOString().split('T')[0]
-      : new Date(item.date).toISOString().split('T')[0];
+    const date = item.fechaYHora;
 
     this.form.patchValue({
-      idUser: item.idUser,
-      idSite: item.idSite,
-      latitude: item.latitude,
-      longitude: item.longitude,
-      date: date,
-      time: item.time
+      idUser: item.usuario,
+      idSite: item.sitio,
+      latitude: item.latitud,
+      longitude: item.longitud,
+      date: date
     });
   }
 
-  protected getItemId(item: Visit): number {
-    return item.idVisit;
+  protected getItemId(item: Visit): string {
+    return item._id;
   }
 }

@@ -4,8 +4,4 @@ export interface Country {
   __v?: number;
   createdAt?: string;
   updatedAt?: string;
-
-  // Compatibility properties
-  idCountry?: number;
-  name?: string;
 }

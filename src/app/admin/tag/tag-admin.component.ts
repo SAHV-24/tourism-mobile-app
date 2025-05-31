@@ -14,7 +14,8 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-tag-admin',
   standalone: true,
   imports: [...COMMON_IMPORTS],
-  templateUrl: './tag-admin.component.html'
+  templateUrl: './tag-admin.component.html',
+  styleUrls: ['./tag-admin.component.scss']
 })
 export class TagAdminComponent extends BaseAdminComponent<Tag> implements OnInit {
   users: User[] = [];
@@ -64,14 +65,14 @@ export class TagAdminComponent extends BaseAdminComponent<Tag> implements OnInit
     });
   }
 
-  getUserName(userId: number): string {
-    const user = this.users.find(u => u.idUser === userId);
-    return user ? user.name : 'Unknown';
+  getUserName(userId: string): string {
+    const user = this.users.find(u => u._id === userId);
+    return user ? user.nombre : 'Unknown';
   }
 
-  getFamousName(famousId: number): string {
-    const famous = this.famousPeople.find(f => f.idFamous === famousId);
-    return famous ? famous.name : 'Unknown';
+  getFamousName(famousId: string): string {
+    const famous = this.famousPeople.find(f => f._id === famousId);
+    return famous ? famous.nombre : 'Unknown';
   }
 
   protected buildForm(): FormGroup {
@@ -87,22 +88,20 @@ export class TagAdminComponent extends BaseAdminComponent<Tag> implements OnInit
   }
 
   protected populateForm(item: Tag): void {
-    const date = item.date instanceof Date
-      ? item.date.toISOString().split('T')[0]
-      : new Date(item.date).toISOString().split('T')[0];
+    const date = item.fecha;
 
     this.form.patchValue({
-      idUser: item.idUser,
-      idFamous: item.idFamous,
-      latitude: item.latitude,
-      longitude: item.longitude,
+      idUser: item.usuario._id,
+      idFamous: item.famoso._id,
+      latitude: item.latitud,
+      longitude: item.longitud,
       date: date,
-      photoUrl: item.photoUrl,
-      comment: item.comment
+      photoUrl: item.fotoUrl,
+      comment: item.comentario
     });
   }
 
-  protected getItemId(item: Tag): number {
-    return item.idTag;
+  protected getItemId(item: Tag): string {
+    return item._id;
   }
 }

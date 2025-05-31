@@ -12,7 +12,8 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-city-admin',
   standalone: true,
   imports: [...COMMON_IMPORTS],
-  templateUrl: './city-admin.component.html'
+  templateUrl: './city-admin.component.html',
+  styleUrls: ['./city-admin.component.scss']
 })
 export class CityAdminComponent extends BaseAdminComponent<City> implements OnInit {
   countries: Country[] = [];
@@ -41,13 +42,13 @@ export class CityAdminComponent extends BaseAdminComponent<City> implements OnIn
           let updatedCountry = { ...country };
 
           // If idCountry is not defined but _id is, use _id as a fallback
-          if (country.idCountry === undefined && country._id) {
-            updatedCountry.idCountry = parseInt(country._id, 10) || 0;
+          if (country._id === undefined && country._id) {
+            updatedCountry._id = country._id;
           }
 
           // If name is not defined but nombre is, use nombre as a fallback
-          if (country.name === undefined && country.nombre) {
-            updatedCountry.name = country.nombre;
+          if (country.nombre === undefined && country.nombre) {
+            updatedCountry.nombre = country.nombre;
           }
 
           return updatedCountry;
@@ -60,17 +61,17 @@ export class CityAdminComponent extends BaseAdminComponent<City> implements OnIn
       },
       complete: () => {
         // Ensure the form is updated with the latest countries
-        if (this.form.get('idCountry')?.value && !this.countries.some(c => c.idCountry === this.form.get('idCountry')?.value)) {
+        if (this.form.get('idCountry')?.value && !this.countries.some(c => c._id === this.form.get('idCountry')?.value)) {
           this.form.get('idCountry')?.setValue(null);
         }
       }
     });
   }
 
-  getCountryName(countryId: number): string {
+  getCountryName(countryId: string): string {
     // Try to find country by idCountry first, then by _id if idCountry is not found
-    const country = this.countries.find(c => c.idCountry === countryId);
-    return country ? (country.nombre || country.name || 'Unknown') : 'Unknown';
+    const country = this.countries.find(c => c._id === countryId);
+    return country ? (country.nombre || country.nombre || 'Unknown') : 'Unknown';
   }
 
   protected buildForm(): FormGroup {
@@ -82,12 +83,12 @@ export class CityAdminComponent extends BaseAdminComponent<City> implements OnIn
 
   protected populateForm(item: City): void {
     this.form.patchValue({
-      name: item.name,
-      idCountry: item.idCountry
+      name: item.nombre,
+      idCountry: item.pais._id
     });
   }
 
-  protected getItemId(item: City): number {
-    return item.idCity;
+  protected getItemId(item: City): string {
+    return item._id;
   }
 }

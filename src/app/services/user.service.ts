@@ -9,7 +9,7 @@ import { UserRoleEnum } from '../models/enums';
   providedIn: 'root'
 })
 export class UserService extends BaseService<User> {
-  protected endpoint = 'users';
+  protected endpoint = 'usuarios';
 
   constructor(protected override http: HttpClient) {
     super(http);

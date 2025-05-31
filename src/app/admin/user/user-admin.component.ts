@@ -12,6 +12,7 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [...COMMON_IMPORTS],
   templateUrl: './user-admin.component.html',
+  styleUrls: ['./user-admin.component.scss' ]
 })
 export class UserAdminComponent extends BaseAdminComponent<User> {
   roles = Object.values(UserRoleEnum);
@@ -38,15 +39,14 @@ export class UserAdminComponent extends BaseAdminComponent<User> {
 
   protected populateForm(item: User): void {
     this.form.patchValue({
-      name: item.name,
-      username: item.username,
-      email: item.email,
-      password: item.password,
-      role: item.role
+      name: item.nombre,
+      username: item.usuario,
+      email: item.correo,
+      role: item.rol
     });
   }
 
-  protected getItemId(item: User): number {
-    return item.idUser;
+  protected getItemId(item: User): string {
+    return item._id;
   }
 }

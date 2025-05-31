@@ -13,7 +13,8 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-famous-admin',
   standalone: true,
   imports: [...COMMON_IMPORTS],
-  templateUrl: './famous-admin.component.html'
+  templateUrl: './famous-admin.component.html',
+  styleUrls: ['./famous-admin.component.scss']
 })
 export class FamousAdminComponent extends BaseAdminComponent<Famous> implements OnInit {
   cities: City[] = [];
@@ -42,21 +43,20 @@ export class FamousAdminComponent extends BaseAdminComponent<Famous> implements 
       },
       error: (error) => {
         console.error('Error loading cities', error);
-        this.cities = []; // Ensure cities is initialized even on error
+        this.cities = [];
         this.showToast('Error loading cities: ' + ((error as any).customMessage || error.message || 'Unknown error'), 'danger');
       },
       complete: () => {
-        // Ensure the form is updated with the latest cities
-        if (this.form.get('idCity')?.value && !this.cities.some(c => c.idCity === this.form.get('idCity')?.value)) {
+        if (this.form.get('idCity')?.value && !this.cities.some(c => c._id === this.form.get('idCity')?.value)) {
           this.form.get('idCity')?.setValue(null);
         }
       }
     });
   }
 
-  getCityName(cityId: number): string {
-    const city = this.cities.find(c => c.idCity === cityId);
-    return city ? city.name : 'Unknown';
+  getCityName(cityId: string): string {
+    const city = this.cities.find(c => c._id === cityId);
+    return city ? city.nombre : 'Unknown';
   }
 
   protected buildForm(): FormGroup {
@@ -71,15 +71,18 @@ export class FamousAdminComponent extends BaseAdminComponent<Famous> implements 
 
   protected populateForm(item: Famous): void {
     this.form.patchValue({
-      name: item.name,
-      idCity: item.idCity,
-      activity: item.activity,
-      photoUrl: item.photoUrl,
-      description: item.description
+      name: item.nombre,
+      idCity: item.ciudadNacimiento,
+      activity: item.actividad,
+      photoUrl: item.foto,
+      description: item.descripcion
     });
   }
 
-  protected getItemId(item: Famous): number {
-    return item.idFamous;
+  protected getItemId(item: Famous): string {
+    return item._id;
   }
 }
+
+
+

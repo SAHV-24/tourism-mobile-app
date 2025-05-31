@@ -1,10 +1,29 @@
 export interface Tag {
-  idTag: number;
-  idUser: number; // Foreign key to User
-  idFamous: number; // Foreign key to Famous
-  latitude: number;
-  longitude: number;
-  date: Date;
-  photoUrl: string;
-  comment: string | null; // Nullable field
+  _id: string;
+  usuario: {
+    _id: string;
+    nombre: string;
+    apellido: string;
+  };
+  famoso: {
+    _id: string;
+    nombre: string;
+    ciudadNacimiento: {
+      _id: string;
+      nombre: string;
+      pais: {
+        _id: string;
+        nombre: string;
+      };
+    };
+    actividad: string;
+  };
+  latitud: number;
+  longitud: number;
+  fotoUrl: string;
+  comentario: string;
+  fecha: string;
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
 }

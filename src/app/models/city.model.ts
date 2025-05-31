@@ -1,5 +1,11 @@
 export interface City {
-  idCity: number;
-  idCountry: number; // Foreign key to Country
-  name: string;
+  _id: string;
+  nombre: string;
+  pais: {
+    _id: string;
+    nombre: string;
+  };
+  __v?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
