@@ -18,7 +18,7 @@ export class VisitService extends BaseService<Visit> {
    * Get visits by user id
    */
   getByUserId(userId: string): Observable<Visit[]> {
-    return this.http.get<Visit[]>(`${this.apiUrl}/${this.endpoint}/user/${userId}`).pipe(
+    return this.http.get<Visit[]>(`${this.apiUrl}/${this.endpoint}/usuario/${userId}`).pipe(
       catchError(this.handleError<Visit[]>('getByUserId', []))
     );
   }
