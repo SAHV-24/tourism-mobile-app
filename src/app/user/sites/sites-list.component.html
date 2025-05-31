@@ -39,6 +39,9 @@
       <ion-button fill="clear" slot="end" (click)="toggleFavorito(site._id)">
         <ion-icon [name]="esFavorito(site._id) ? 'heart' : 'heart-outline'" color="danger"></ion-icon>
       </ion-button>
+      <ion-button fill="clear" slot="end" (click)="confirmRegistrarVisita(site)">
+        <ion-icon name="walk-outline" color="primary"></ion-icon>
+      </ion-button>
     </ion-item>
   </ion-list>
 </ion-content>

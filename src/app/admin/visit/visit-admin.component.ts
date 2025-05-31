@@ -65,14 +65,22 @@ export class VisitAdminComponent extends BaseAdminComponent<Visit> implements On
     });
   }
 
-  getUserName(userId: string): string {
-    const user = this.users.find(u => u._id === userId);
-    return user ? user.nombre : 'Unknown';
+  getUserName(user: any): string {
+    if (!user) return 'Unknown';
+    if (typeof user === 'string') {
+      const found = this.users.find(u => u._id === user);
+      return found ? found.nombre : user;
+    }
+    return user.nombre || 'Unknown';
   }
 
-  getSiteName(siteId: string): string {
-    const site = this.sites.find(s => s._id === siteId);
-    return site ? site.nombre : 'Unknown';
+  getSiteName(site: any): string {
+    if (!site) return 'Unknown';
+    if (typeof site === 'string') {
+      const found = this.sites.find(s => s._id === site);
+      return found ? found.nombre : site;
+    }
+    return site.nombre || 'Unknown';
   }
 
   protected buildForm(): FormGroup {
@@ -81,31 +89,73 @@ export class VisitAdminComponent extends BaseAdminComponent<Visit> implements On
       idSite: [null, [Validators.required]],
       latitude: [null, [Validators.required]],
       longitude: [null, [Validators.required]],
-      date: [new Date().toISOString().split('T')[0], [Validators.required]],
-      time: [null, [Validators.required]]
+      fechaYHora: [new Date().toISOString(), [Validators.required]]
     });
   }
 
   protected populateForm(item: Visit): void {
-    const dateTime = item.fechaYHora;
-    let date = null;
-    let time = null;
-    if (dateTime) {
-      const dt = new Date(dateTime);
-      date = dt.toISOString().split('T')[0];
-      time = dt.toISOString().split('T')[1]?.substring(0,5) || null;
-    }
     this.form.patchValue({
       idUser: item.usuario,
       idSite: item.sitio,
       latitude: item.latitud,
       longitude: item.longitud,
-      date: date,
-      time: time
+      fechaYHora: item.fechaYHora ? new Date(item.fechaYHora).toISOString() : new Date().toISOString()
     });
   }
 
   protected getItemId(item: Visit): string {
-    return item._id;
+    return item._id ?? '';
+  }
+
+  override createItem() {
+    if (this.form.invalid) return;
+    const formValue = this.form.value;
+    const newVisit = {
+      usuario: formValue.idUser,
+      sitio: formValue.idSite,
+      latitud: formValue.latitude,
+      longitud: formValue.longitude,
+      fechaYHora: formValue.fechaYHora
+    };
+    this.isLoading = true;
+    this.service.create(newVisit).subscribe({
+      next: () => {
+        this.showToast('Visita creada exitosamente', 'success');
+        this.form.reset();
+        this.isEditing = false;
+        this.loadItems();
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.showToast('Error al crear visita: ' + ((error as any).customMessage || error.message || 'Error desconocido'), 'danger');
+        this.isLoading = false;
+      }
+    });
+  }
+
+  override updateItem() {
+    if (this.form.invalid || !this.currentItem) return;
+    const formValue = this.form.value;
+    const updatedVisit = {
+      usuario: formValue.idUser,
+      sitio: formValue.idSite,
+      latitud: formValue.latitude,
+      longitud: formValue.longitude,
+      fechaYHora: formValue.fechaYHora
+    };
+    this.isLoading = true;
+    this.service.update(this.getItemId(this.currentItem), updatedVisit).subscribe({
+      next: () => {
+        this.showToast('Visita actualizada exitosamente', 'success');
+        this.form.reset();
+        this.isEditing = false;
+        this.loadItems();
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.showToast('Error al actualizar visita: ' + ((error as any).customMessage || error.message || 'Error desconocido'), 'danger');
+        this.isLoading = false;
+      }
+    });
   }
 }

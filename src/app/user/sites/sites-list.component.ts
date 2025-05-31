@@ -1,13 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, AlertController, ToastController } from '@ionic/angular';
 import { Site } from 'src/app/models/site.model';
 import { Country } from 'src/app/models/country.model';
 import { City } from 'src/app/models/city.model';
 import { SiteService } from 'src/app/services/site.service';
 import { CountryService } from 'src/app/services/country.service';
 import { CityService } from 'src/app/services/city.service';
+import { VisitService } from 'src/app/services/visit.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
@@ -31,7 +33,11 @@ export class SitesListComponent implements OnInit, OnDestroy {
     private siteService: SiteService,
     private countryService: CountryService,
     private cityService: CityService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private alertController: AlertController,
+    private toastController: ToastController,
+    private visitService: VisitService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -115,5 +121,76 @@ export class SitesListComponent implements OnInit, OnDestroy {
     this.selectedCity = null;
     this.cities = [];
     this.filterSites();
+  }
+
+  async confirmRegistrarVisita(site: Site) {
+    const alert = await this.alertController.create({
+      header: 'Registrar visita',
+      message: `¿Deseas registrar una visita a ${site.nombre}?`,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Registrar',
+          handler: () => this.registrarVisita(site)
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  registrarVisita(site: Site) {
+    if (!this.authService.currentUserId) {
+      this.toastController.create({
+        message: 'No se pudo obtener el usuario actual',
+        duration: 2000,
+        color: 'danger'
+      }).then(t => t.present());
+      return;
+    }
+    if (!navigator.geolocation) {
+      this.toastController.create({
+        message: 'Geolocalización no soportada',
+        duration: 2000,
+        color: 'danger'
+      }).then(t => t.present());
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        const visita = {
+          usuario: String(this.authService.currentUserId),
+          sitio: site._id,
+          latitud: pos.coords.latitude,
+          longitud: pos.coords.longitude,
+          fechaYHora: new Date().toISOString()
+        };
+        this.visitService.create(visita).subscribe({
+          next: () => {
+            this.toastController.create({
+              message: 'Visita registrada',
+              duration: 2000,
+              color: 'success'
+            }).then(t => t.present());
+          },
+          error: () => {
+            this.toastController.create({
+              message: 'Error al registrar visita',
+              duration: 2000,
+              color: 'danger'
+            }).then(t => t.present());
+          }
+        });
+      },
+      () => {
+        this.toastController.create({
+          message: 'No se pudo obtener tu ubicación',
+          duration: 2000,
+          color: 'danger'
+        }).then(t => t.present());
+      }
+    );
   }
 }
