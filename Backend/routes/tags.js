@@ -224,9 +224,11 @@ router.post('/', upload.single('foto'), async (req, res) => {
       });
       fotoUrl = result.secure_url;
     }
+    // Si el usuario envía fecha, se respeta; si no, se usa el default del schema
     const nuevoTag = new Tag({
       ...req.body,
-      fotoUrl
+      fotoUrl,
+      fecha: req.body.fecha ? new Date(req.body.fecha) : undefined
     });
     const tagGuardado = await nuevoTag.save();
     const tagCompleto = await Tag.findById(tagGuardado._id)
@@ -258,6 +260,9 @@ router.put('/:id', upload.single('foto'), async (req, res) => {
         folder: 'tags'
       });
       updateData.fotoUrl = result.secure_url;
+    }
+    if (req.body.fecha) {
+      updateData.fecha = new Date(req.body.fecha);
     }
     const tagActualizado = await Tag.findByIdAndUpdate(
       req.params.id,

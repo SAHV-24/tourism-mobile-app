@@ -18,7 +18,7 @@ const sitioSchema = new mongoose.Schema({
   tipoSitio: { 
     type: String, 
     required: true,
-    enum: ['Restaurant', 'Hotel', 'Atracción Turística', 'Museo', 'Parque', 'Monumento', 'Centro Comercial', 'Teatro', 'Estadio', 'Otro']
+    enum: ['Restaurante', 'Hotel', 'Atracción Turística', 'Museo', 'Parque', 'Monumento', 'Centro Comercial', 'Teatro', 'Estadio', 'Otro']
   }
 }, { 
   timestamps: true 

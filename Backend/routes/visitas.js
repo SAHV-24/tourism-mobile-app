@@ -211,6 +211,7 @@ router.get('/usuario/:usuarioId', async (req, res) => {
 });
 
 // GET - Top 10 sitios más visitados por país
+// (Este endpoint ha sido migrado a /api/queries/top-sitios y documentado en Consultas)
 router.get('/top-sitios/:paisId', async (req, res) => {
   try {
     const topSitios = await Visita.aggregate([

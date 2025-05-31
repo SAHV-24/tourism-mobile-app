@@ -29,6 +29,7 @@ app.use("/api/platos", auth, require("./routes/platos"));
 app.use("/api/famosos", auth, require("./routes/famosos"));
 app.use("/api/tags", auth, require("./routes/tags"));
 app.use("/api/visitas", auth, require("./routes/visitas"));
+app.use("/api/queries", auth, require("./routes/queries"));
 
 // Rutas públicas (login/signup)
 app.use("/api/usuarios", require("./routes/usuarios"));
@@ -38,7 +39,7 @@ app.get("/", (req, res) => {
   res.json({
     mensaje: "🚀 API de Proyecto Móviles 2025-01 funcionando correctamente",
     endpoints: [
-      "/api-docs - Documentación de Swagger de la API",
+      "/api-docs",
       "/api/paises",
       "/api/ciudades",
       "/api/sitios",
