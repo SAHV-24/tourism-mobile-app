@@ -42,4 +42,18 @@ export class TagService extends BaseService<Tag> {
       catchError(this.handleError<Tag[]>('getByDateRange', []))
     );
   }
+
+  /**
+   * Create a new tag (supports FormData for multipart/form-data)
+   */
+  override create(item: any): Observable<Tag> {
+    // If item is FormData, send as multipart/form-data, else fallback to default
+    if (item instanceof FormData) {
+      return this.http.post<Tag>(`${this.apiUrl}/${this.endpoint}`, item).pipe(
+        catchError(this.handleError<Tag>('create'))
+      );
+    } else {
+      return super.create(item);
+    }
+  }
 }

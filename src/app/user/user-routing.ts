@@ -8,6 +8,7 @@ import {TagListComponent} from "./tags/tag-list.component";
 import {MyTagsComponent} from "./tags/my-tags.component";
 import {TagPageComponent as TagCreateComponent} from "./tags/tag-page/tag-page.component";
 import { AuthGuard } from "../services";
+import { RouteMapComponent } from './route-map/route-map.component';
 
 export const USER_ROUTES: Routes = [
   {
@@ -18,7 +19,8 @@ export const USER_ROUTES: Routes = [
       { path: '', redirectTo: 'countries', pathMatch: 'full' },
       { path: 'sites', component: SitesListComponent },
       { path: 'favorites', component: FavoritesComponent },
-      { path: 'routes', component: RoutesComponent}
+      { path: 'routes', component: RoutesComponent},
+      { path: 'route-map/:id', component: RouteMapComponent }
     ]
   }
 ];

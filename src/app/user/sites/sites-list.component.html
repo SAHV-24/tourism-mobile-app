@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Listado de Sitios</ion-title>
+    <ion-title>Sites</ion-title>
     <ion-buttons slot="end">
       <ion-button fill="clear" size="small" (click)="clearFilters()">
         Clear
@@ -11,13 +11,13 @@
 
 <ion-content>
   <ion-item>
-    <ion-label>País</ion-label>
+    <ion-label>Country</ion-label>
     <ion-select [(ngModel)]="selectedCountry" (ionChange)="onCountryChange()">
       <ion-select-option *ngFor="let country of countries" [value]="country._id">{{ country.nombre }}</ion-select-option>
     </ion-select>
   </ion-item>
   <ion-item>
-    <ion-label>Ciudad</ion-label>
+    <ion-label>City</ion-label>
     <ion-select [(ngModel)]="selectedCity" (ionChange)="onCityChange()">
       <ion-select-option *ngFor="let city of cities" [value]="city._id">{{ city.nombre }}</ion-select-option>
     </ion-select>
