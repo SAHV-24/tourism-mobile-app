@@ -76,15 +76,15 @@ export class CityAdminComponent extends BaseAdminComponent<City> implements OnIn
 
   protected buildForm(): FormGroup {
     return this.fb.group({
-      name: ['', [Validators.required]],
-      idCountry: [null, [Validators.required]]
+      nombre: ['', [Validators.required]],
+      pais: [null, [Validators.required]]
     });
   }
 
   protected populateForm(item: City): void {
     this.form.patchValue({
-      name: item.nombre,
-      idCountry: item.pais._id
+      nombre: item.nombre,
+      pais: item.pais._id
     });
   }
 
