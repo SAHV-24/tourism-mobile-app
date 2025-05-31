@@ -14,7 +14,7 @@
 
 <ion-content>
   <ion-item>
-    <ion-label>Conuntry</ion-label>
+    <ion-label>Country</ion-label>
     <ion-select [(ngModel)]="selectedCountry" (ionChange)="onCountryChange()">
       <ion-select-option *ngFor="let country of countries" [value]="country._id">{{ country.nombre }}</ion-select-option>
     </ion-select>
