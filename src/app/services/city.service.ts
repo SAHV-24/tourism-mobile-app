@@ -17,8 +17,8 @@ export class CityService extends BaseService<City> {
   /**
    * Get cities by country id
    */
-  getByCountryId(countryId: number): Observable<City[]> {
-    return this.http.get<City[]>(`${this.apiUrl}/${this.endpoint}/country/${countryId}`).pipe(
+  getByCountryId(countryId: number | string): Observable<City[]> {
+    return this.http.get<City[]>(`${this.apiUrl}/${this.endpoint}/pais/${countryId.toString()}`).pipe(
       catchError(this.handleError<City[]>('getByCountryId', []))
     );
   }
