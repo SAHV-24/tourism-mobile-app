@@ -1,5 +1,5 @@
 export interface Visit {
-  _id: string;
+  _id?: string;
   usuario: string;
   sitio: string;
   latitud: number;
