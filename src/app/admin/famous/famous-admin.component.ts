@@ -61,21 +61,21 @@ export class FamousAdminComponent extends BaseAdminComponent<Famous> implements 
 
   protected buildForm(): FormGroup {
     return this.fb.group({
-      name: ['', [Validators.required]],
-      idCity: [null, [Validators.required]],
-      activity: [null, [Validators.required]],
-      photoUrl: ['', [Validators.required]],
-      description: ['', [Validators.required]]
+      nombre: ['', [Validators.required]],
+      ciudadNacimiento: [null, [Validators.required]],
+      actividad: [null, [Validators.required]],
+      foto: ['', [Validators.required]],
+      descripcion: ['', [Validators.required]]
     });
   }
 
   protected populateForm(item: Famous): void {
     this.form.patchValue({
-      name: item.nombre,
-      idCity: item.ciudadNacimiento,
-      activity: item.actividad,
-      photoUrl: item.foto,
-      description: item.descripcion
+      nombre: item.nombre,
+      ciudadNacimiento: item.ciudadNacimiento,
+      actividad: item.actividad,
+      foto: item.foto, // item.foto es el campo correcto
+      descripcion: item.descripcion
     });
   }
 
