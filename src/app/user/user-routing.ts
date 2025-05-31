@@ -1,6 +1,5 @@
 import {Routes} from "@angular/router";
 import {RoleGuard} from "../services/role.guard";
-import {SitesComponent} from "./sites/sites.component";
 import {SitesListComponent} from "./sites/sites-list.component";
 import {FavoritesComponent} from "./favorites/favorites.component";
 import {RoutesComponent} from "./routes/routes.component";

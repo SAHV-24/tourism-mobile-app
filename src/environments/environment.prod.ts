@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:3200/api'
+  apiUrl: 'https://tourism-mobile-app.onrender.com/api'
 };

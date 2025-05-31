@@ -4,6 +4,6 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3200/api',
+  apiUrl: 'https://tourism-mobile-app.onrender.com/api',
   googleMapsApiKey: 'AIzaSyDuU_ds9wnT5mV2KM8haZ6KfUfqclYXZQk'
 };

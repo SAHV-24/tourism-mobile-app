@@ -17,8 +17,8 @@ export class TagService extends BaseService<Tag> {
   /**
    * Get tags by user id
    */
-  getByUserId(userId: number): Observable<Tag[]> {
-    return this.http.get<Tag[]>(`${this.apiUrl}/${this.endpoint}/user/${userId}`).pipe(
+  getByUserId(userId: string): Observable<Tag[]> {
+    return this.http.get<Tag[]>(`${this.apiUrl}/${this.endpoint}/usuario/${userId}`).pipe(
       catchError(this.handleError<Tag[]>('getByUserId', []))
     );
   }
@@ -26,8 +26,8 @@ export class TagService extends BaseService<Tag> {
   /**
    * Get tags by famous id
    */
-  getByFamousId(famousId: number): Observable<Tag[]> {
-    return this.http.get<Tag[]>(`${this.apiUrl}/${this.endpoint}/famous/${famousId}`).pipe(
+  getByFamousId(famousId: string): Observable<Tag[]> {
+    return this.http.get<Tag[]>(`${this.apiUrl}/${this.endpoint}/famoso/${famousId}`).pipe(
       catchError(this.handleError<Tag[]>('getByFamousId', []))
     );
   }
@@ -41,5 +41,19 @@ export class TagService extends BaseService<Tag> {
     return this.http.get<Tag[]>(`${this.apiUrl}/${this.endpoint}/date-range?start=${start}&end=${end}`).pipe(
       catchError(this.handleError<Tag[]>('getByDateRange', []))
     );
+  }
+
+  /**
+   * Create a new tag (supports FormData for multipart/form-data)
+   */
+  override create(item: any): Observable<Tag> {
+    // If item is FormData, send as multipart/form-data, else fallback to default
+    if (item instanceof FormData) {
+      return this.http.post<Tag>(`${this.apiUrl}/${this.endpoint}`, item).pipe(
+        catchError(this.handleError<Tag>('create'))
+      );
+    } else {
+      return super.create(item);
+    }
   }
 }
