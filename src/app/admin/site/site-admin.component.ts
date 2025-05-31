@@ -62,20 +62,19 @@ export class SiteAdminComponent extends BaseAdminComponent<Site> implements OnIn
 
   protected buildForm(): FormGroup {
     return this.fb.group({
-      name: ['', [Validators.required]],
-      idCity: [null, [Validators.required]],
-      category: [null, [Validators.required]],
-      latitude: [null, [Validators.required]],
-      longitude: [null, [Validators.required]]
+      nombre: ['', [Validators.required]],
+      ciudad: [null, [Validators.required]],
+      tipoSitio: [null, [Validators.required]],
+      ubicacion: [null, [Validators.required]]
     });
   }
 
   protected populateForm(item: Site): void {
     this.form.patchValue({
-      name: item.nombre,
-      idCity: item.ciudad._id,
-      category: item.tipoSitio,
-      ubication: item.ubicacion,
+      nombre: item.nombre,
+      ciudad: item.ciudad._id, // Usar el _id de la ciudad
+      tipoSitio: item.tipoSitio,
+      ubicacion: item.ubicacion
     });
   }
 

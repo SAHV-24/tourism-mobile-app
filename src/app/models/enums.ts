@@ -1,10 +1,14 @@
 export enum SiteCategoryEnum {
-  RESTAURANT = 'RESTAURANT',
-  MUSEUM = 'MUSEUM',
-  PARK = 'PARK',
-  HISTORICAL = 'HISTORICAL',
-  ENTERTAINMENT = 'ENTERTAINMENT',
-  OTHER = 'OTHER'
+  RESTAURANT = 'Restaurant',
+  HOTEL = 'Hotel',
+  ATTRACTION = 'Atracción Turística',
+  MUSEUM = 'Museo',
+  PARK = 'Parque',
+  MONUMENT = 'Monumento',
+  SHOPPING = 'Centro Comercial',
+  THEATER = 'Teatro',
+  STADIUM = 'Estadio',
+  OTHER = 'Otro'
 }
 
 export enum ActivityEnum {
