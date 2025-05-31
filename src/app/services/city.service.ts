@@ -5,7 +5,7 @@ import { City } from '../models/city.model';
 import { Observable, catchError } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CityService extends BaseService<City> {
   protected endpoint = 'ciudades';
@@ -17,9 +17,9 @@ export class CityService extends BaseService<City> {
   /**
    * Get cities by country id
    */
-  getByCountryId(countryId: number | string): Observable<City[]> {
-    return this.http.get<City[]>(`${this.apiUrl}/${this.endpoint}/pais/${countryId.toString()}`).pipe(
-      catchError(this.handleError<City[]>('getByCountryId', []))
-    );
+  getByCountryId(countryId: string): Observable<City[]> {
+    return this.http
+      .get<City[]>(`${this.apiUrl}/${this.endpoint}/pais/${countryId}`)
+      .pipe(catchError(this.handleError<City[]>('getByCountryId', [])));
   }
 }
