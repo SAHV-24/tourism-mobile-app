@@ -154,7 +154,7 @@ export class LoginPage implements OnInit, OnDestroy {
             // Add default role
             const signupData: SignupRequest = {
               ...data,
-              rol: 'Administrador' // Using the role from the example
+              rol: 'UsuarioDefault' // Using the role from the example
             };
 
             // Show loading indicator

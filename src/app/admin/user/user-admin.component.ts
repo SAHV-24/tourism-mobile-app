@@ -29,20 +29,23 @@ export class UserAdminComponent extends BaseAdminComponent<User> {
 
   protected buildForm(): FormGroup {
     return this.fb.group({
-      name: ['', [Validators.required]],
-      username: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]],
-      role: [UserRoleEnum.USER, [Validators.required]]
+      nombre: ['', [Validators.required]],
+      apellido: ['', [Validators.required]],
+      correo: ['', [Validators.required, Validators.email]],
+      usuario: ['', [Validators.required]],
+      contraseña: ['', [Validators.required]],
+      rol: [UserRoleEnum.USER, [Validators.required]]
     });
   }
 
   protected populateForm(item: User): void {
     this.form.patchValue({
-      name: item.nombre,
-      username: item.usuario,
-      email: item.correo,
-      role: item.rol
+      nombre: item.nombre,
+      apellido: item.apellido,
+      correo: item.correo,
+      usuario: item.usuario,
+      contraseña: '', // Por seguridad, no se rellena la contraseña
+      rol: item.rol
     });
   }
 

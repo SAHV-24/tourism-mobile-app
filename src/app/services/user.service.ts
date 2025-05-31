@@ -35,4 +35,13 @@ export class UserService extends BaseService<User> {
       catchError(this.handleError<any>('changePassword'))
     );
   }
+
+  /**
+   * Crear usuario usando el endpoint correcto /api/usuarios/signup
+   */
+  override create(item: User): Observable<User> {
+    return this.http.post<User>(`${this.apiUrl}/${this.endpoint}/signup`, item).pipe(
+      catchError(this.handleError<User>('create'))
+    );
+  }
 }

@@ -12,16 +12,18 @@ export enum SiteCategoryEnum {
 }
 
 export enum ActivityEnum {
-  ACTOR = 'ACTOR',
-  MUSICIAN = 'MUSICIAN',
-  POLITICIAN = 'POLITICIAN',
-  ATHLETE = 'ATHLETE',
-  WRITER = 'WRITER',
-  ARTIST = 'ARTIST',
-  OTHER = 'OTHER'
+  ACTOR = 'Actor',
+  SINGER = 'Cantante',
+  SPORTS_PLAYER = 'Deportista',
+  POLITICIAN = 'Político',
+  WRITER = 'Escritor',
+  ARTIST = 'Artista',
+  SCIENTIST = 'Científico',
+  BUSINESS_PERSON = 'Empresario',
+  OTHER = 'Otro'
 }
 
 export enum UserRoleEnum {
-  ADMIN = 'admin',
-  USER = 'usuario'
+  ADMIN = 'Administrador',
+  USER = 'UsuarioDefault'
 }
