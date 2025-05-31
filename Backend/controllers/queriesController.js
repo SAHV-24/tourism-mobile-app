@@ -113,14 +113,9 @@ exports.platosPorUsuariosUnicos = async (req, res) => {
   }
 };
 
-// 5. Top 10 sitios más visitados por país (migrado desde visitas.js, ahora usa query param paisId)
+// 5. Top 10 sitios más visitados de toda la base de datos
 exports.topSitios = async (req, res) => {
   try {
-    const { paisId } = req.query;
-    if (!paisId) {
-      return res.status(400).json({ mensaje: 'El parámetro paisId es obligatorio' });
-    }
-    const mongoose = require('mongoose');
     const topSitios = await Visita.aggregate([
       {
         $lookup: {
@@ -140,11 +135,6 @@ exports.topSitios = async (req, res) => {
         }
       },
       { $unwind: '$ciudadInfo' },
-      {
-        $match: {
-          'ciudadInfo.pais': new mongoose.Types.ObjectId(paisId)
-        }
-      },
       {
         $group: {
           _id: '$sitio',
