@@ -1,6 +1,7 @@
 import { PreloadAllModules, provideRouter, withPreloading, Routes } from '@angular/router';
 import { AuthGuard } from './services/auth.guard';
 import { ADMIN_ROUTES } from './admin/admin-routing';
+import {USER_ROUTES} from "./user/user-routing";
 
 export const routes: Routes = [
   {
@@ -17,7 +18,8 @@ export const routes: Routes = [
     loadComponent: () => import('./folder/folder.page').then(m => m.FolderPage),
     canActivate: [AuthGuard]
   },
-  ...ADMIN_ROUTES
+  ...ADMIN_ROUTES,
+  ...USER_ROUTES
 ];
 
 export const appRouting = [

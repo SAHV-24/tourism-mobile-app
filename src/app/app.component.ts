@@ -14,7 +14,8 @@ import { RouterModule } from '@angular/router';
 export class AppComponent {
   public appPages = [
     { title: 'Home', url: '/folder/home', icon: 'home' },
-    { title: 'Admin', url: '/admin', icon: 'settings' }
+    { title: 'Admin', url: '/admin', icon: 'settings' },
+    { title: 'Sites', url: '/user/sites', icon: 'location' },
   ];
 
   constructor(public authService: AuthService) {}
