@@ -66,6 +66,30 @@
         <ion-col size="12" size-md="6">
           <ion-card>
             <ion-card-header>
+              <ion-card-title>Filtros</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-item>
+                <ion-label>País</ion-label>
+                <ion-select [(ngModel)]="selectedCountry" (ionChange)="onCountryChange()" interface="popover">
+                  <ion-select-option [value]="null">Todos</ion-select-option>
+                  <ion-select-option *ngFor="let country of countries" [value]="country._id">{{ country.nombre }}</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <ion-item>
+                <ion-label>Ciudad</ion-label>
+                <ion-select [(ngModel)]="selectedCity" (ionChange)="onCityChange()" interface="popover" [disabled]="!selectedCountry">
+                  <ion-select-option [value]="null">Todas</ion-select-option>
+                  <ion-select-option *ngFor="let city of filteredCities" [value]="city._id">{{ city.nombre }}</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <ion-col size="12" size-md="6">
+          <ion-card>
+            <ion-card-header>
               <ion-card-title>Sites</ion-card-title>
             </ion-card-header>
             <ion-card-content>
@@ -75,11 +99,11 @@
                   <ion-spinner name="dots"></ion-spinner>
                 </ion-item>
 
-                <ion-item *ngIf="!isLoading && items.length === 0">
+                <ion-item *ngIf="!isLoading && filteredSites.length === 0">
                   <ion-label>No sites found</ion-label>
                 </ion-item>
 
-                <ion-item *ngFor="let site of items">
+                <ion-item *ngFor="let site of filteredSites">
                   <ion-label>
                     <h2>{{ site.nombre }}</h2>
                     <p>City: {{ getCityName(site.ciudad._id) }}</p>
