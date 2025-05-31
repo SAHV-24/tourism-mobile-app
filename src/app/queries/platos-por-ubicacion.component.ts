@@ -52,10 +52,22 @@ import { PlatoTaggeado } from '../models/queries.models';
       <ion-list *ngIf="dishes.length > 0">
         <ion-item *ngFor="let dish of dishes; let i = index">
           <ion-label>
-            <h3>{{ i + 1 }}. {{ dish.plato && dish.plato.nombre ? dish.plato.nombre : 'Unknown' }}</h3>
+            <h3>{{ i + 1 }}. {{ dish.nombre ? dish.nombre : 'Unknown' }}</h3>
             <p>Tags: {{ dish.totalTags }}</p>
-            <p>Site: {{ dish.plato && dish.plato.sitio ? dish.plato.sitio : 'Unknown' }}</p>
-            <p>Price: {{ dish.plato && dish.plato.precio != null ? (dish.plato.precio | currency : 'EUR') : 'N/A' }}</p>
+            <p>
+              Site:
+              {{
+                dish && dish.sitio ? dish.sitio : 'Unknown'
+              }}
+            </p>
+            <p>
+              Price:
+              {{
+                dish && dish.precio != null
+                  ? (dish.precio | currency : 'USD')
+                  : 'N/A'
+              }}
+            </p>
           </ion-label>
         </ion-item>
       </ion-list>
@@ -83,7 +95,7 @@ import { PlatoTaggeado } from '../models/queries.models';
 export class PlatosPorUbicacionComponent implements OnInit {
   countries: Country[] = [];
   cities: City[] = [];
-  dishes: PlatoTaggeado[] = [];
+  dishes: any[] = [];
   selectedCountryId: string | null = null;
   selectedCityId: string | null = null;
   loading = false;

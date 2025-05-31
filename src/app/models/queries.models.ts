@@ -34,16 +34,7 @@ export interface UsuarioVisitas {
 
 // 3. Platos más taggeados, filtrando por país o ciudad
 export interface PlatoTaggeado {
-  plato: {
-    _id: string;
-    nombre: string;
-    foto: string;
-    sitio: string; // ObjectId de Sitio
-    precio: number;
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
-  };
+  plato: PlatoPorUsuariosUnicos;
   totalTags: number;
 }
 
