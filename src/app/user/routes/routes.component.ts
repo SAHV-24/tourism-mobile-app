@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-routes',
@@ -11,6 +12,8 @@ import { IonicModule } from '@ionic/angular';
 })
 export class RoutesComponent implements OnInit {
   routes: any[] = [];
+
+  constructor(private router: Router) {}
 
   ngOnInit() {
     this.loadRoutes();
@@ -27,8 +30,7 @@ export class RoutesComponent implements OnInit {
   }
 
   viewOnMap(route: any) {
-    // Aquí irá la lógica para mostrar la ruta en Google Maps
-    alert('Map view coming soon!');
+    this.router.navigate(['/user/route-map', route.id]);
   }
 }
 
