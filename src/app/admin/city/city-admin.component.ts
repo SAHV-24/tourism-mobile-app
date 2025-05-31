@@ -6,99 +6,13 @@ import { City } from '../../models/city.model';
 import { Country } from '../../models/country.model';
 import { CityService } from '../../services/city.service';
 import { CountryService } from '../../services/country.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-city-admin',
   standalone: true,
   imports: [...COMMON_IMPORTS],
-  template: `
-    <ion-content class="ion-padding">
-      <ion-grid>
-        <ion-row>
-          <ion-col size="12" size-md="6">
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>{{ isEditing ? 'Edit City' : 'Add City' }}</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <form [formGroup]="form" (ngSubmit)="isEditing ? updateItem() : createItem()">
-                  <ion-item>
-                    <ion-label position="floating">Name</ion-label>
-                    <ion-input formControlName="name" type="text"></ion-input>
-                    <ion-note slot="error" *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
-                      Name is required
-                    </ion-note>
-                  </ion-item>
-
-                  <ion-item>
-                    <ion-label position="floating">Country</ion-label>
-                    <ion-select formControlName="idCountry">
-                      <ion-select-option *ngFor="let country of countries" [value]="country.idCountry">
-                        {{ country.name }}
-                      </ion-select-option>
-                    </ion-select>
-                    <ion-note slot="error" *ngIf="form.get('idCountry')?.invalid && form.get('idCountry')?.touched">
-                      Country is required
-                    </ion-note>
-                  </ion-item>
-
-                  <div class="ion-padding-top">
-                    <ion-button type="submit" expand="block" [disabled]="form.invalid || isLoading">
-                      {{ isEditing ? 'Update' : 'Create' }}
-                    </ion-button>
-                    <ion-button *ngIf="isEditing" type="button" expand="block" fill="outline"
-                                (click)="cancelEdit()" [disabled]="isLoading">
-                      Cancel
-                    </ion-button>
-                  </div>
-                </form>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-
-          <ion-col size="12" size-md="6">
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>Cities</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <ion-list>
-                  <ion-item *ngIf="isLoading">
-                    <ion-label>Loading...</ion-label>
-                    <ion-spinner name="dots"></ion-spinner>
-                  </ion-item>
-
-                  <ion-item *ngIf="!isLoading && items.length === 0">
-                    <ion-label>No cities found</ion-label>
-                  </ion-item>
-
-                  <ion-item *ngFor="let city of items">
-                    <ion-label>
-                      <h2>{{ city.name }}</h2>
-                      <p>Country: {{ getCountryName(city.idCountry) }}</p>
-                    </ion-label>
-                    <ion-buttons slot="end">
-                      <ion-button (click)="editItem(city)">
-                        <ion-icon name="create-outline"></ion-icon>
-                      </ion-button>
-                      <ion-button (click)="confirmDelete(city)">
-                        <ion-icon name="trash-outline"></ion-icon>
-                      </ion-button>
-                    </ion-buttons>
-                  </ion-item>
-                </ion-list>
-
-                <ion-button expand="block" (click)="loadItems()" [disabled]="isLoading">
-                  <ion-icon name="refresh-outline"></ion-icon>
-                  Refresh
-                </ion-button>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-content>
-  `
+  templateUrl: './city-admin.component.html'
 })
 export class CityAdminComponent extends BaseAdminComponent<City> implements OnInit {
   countries: Country[] = [];
@@ -108,9 +22,10 @@ export class CityAdminComponent extends BaseAdminComponent<City> implements OnIn
     private countryService: CountryService,
     protected override fb: FormBuilder,
     protected override alertController: AlertController,
-    protected override toastController: ToastController
+    protected override toastController: ToastController,
+    protected override authService: AuthService
   ) {
-    super(cityService, fb, alertController, toastController);
+    super(cityService, fb, alertController, toastController, authService);
   }
 
   override ngOnInit() {
@@ -121,7 +36,22 @@ export class CityAdminComponent extends BaseAdminComponent<City> implements OnIn
   loadCountries() {
     this.countryService.getAll().subscribe({
       next: (data) => {
-        this.countries = data || [];
+        // Ensure all countries have idCountry and name properties for backward compatibility
+        this.countries = (data || []).map(country => {
+          let updatedCountry = { ...country };
+
+          // If idCountry is not defined but _id is, use _id as a fallback
+          if (country.idCountry === undefined && country._id) {
+            updatedCountry.idCountry = parseInt(country._id, 10) || 0;
+          }
+
+          // If name is not defined but nombre is, use nombre as a fallback
+          if (country.name === undefined && country.nombre) {
+            updatedCountry.name = country.nombre;
+          }
+
+          return updatedCountry;
+        });
       },
       error: (error) => {
         console.error('Error loading countries', error);
@@ -138,8 +68,9 @@ export class CityAdminComponent extends BaseAdminComponent<City> implements OnIn
   }
 
   getCountryName(countryId: number): string {
+    // Try to find country by idCountry first, then by _id if idCountry is not found
     const country = this.countries.find(c => c.idCountry === countryId);
-    return country ? country.name : 'Unknown';
+    return country ? (country.nombre || country.name || 'Unknown') : 'Unknown';
   }
 
   protected buildForm(): FormGroup {

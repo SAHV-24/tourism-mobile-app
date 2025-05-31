@@ -22,7 +22,7 @@ export abstract class BaseService<T> {
   /**
    * Get item by id
    */
-  getById(id: number): Observable<T> {
+  getById(id: number | string): Observable<T> {
     return this.http.get<T>(`${this.apiUrl}/${this.endpoint}/${id}`).pipe(
       catchError(this.handleError<T>('getById'))
     );
@@ -40,7 +40,7 @@ export abstract class BaseService<T> {
   /**
    * Update existing item
    */
-  update(id: number, item: T): Observable<T> {
+  update(id: number | string, item: T): Observable<T> {
     return this.http.put<T>(`${this.apiUrl}/${this.endpoint}/${id}`, item).pipe(
       catchError(this.handleError<T>('update'))
     );
@@ -49,7 +49,7 @@ export abstract class BaseService<T> {
   /**
    * Delete item
    */
-  delete(id: number): Observable<any> {
+  delete(id: number | string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${this.endpoint}/${id}`).pipe(
       catchError(this.handleError('delete'))
     );

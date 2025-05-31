@@ -8,13 +8,14 @@ import { UserAdminComponent } from './user/user-admin.component';
 import { VisitAdminComponent } from './visit/visit-admin.component';
 import { FamousAdminComponent } from './famous/famous-admin.component';
 import { TagAdminComponent } from './tag/tag-admin.component';
-import { AuthGuard } from '../services/auth.guard';
+import { RoleGuard } from '../services/role.guard';
 
 export const ADMIN_ROUTES: Routes = [
   {
     path: 'admin',
     component: AdminLayoutComponent,
-    canActivate: [AuthGuard],
+    canActivate: [RoleGuard],
+    data: { requiredRole: 'Administrador' },
     children: [
       { path: '', redirectTo: 'countries', pathMatch: 'full' },
       { path: 'countries', component: CountryAdminComponent },

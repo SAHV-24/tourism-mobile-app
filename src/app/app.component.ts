@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from './services/auth.service';
+import { AuthService } from './services';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
@@ -14,7 +14,7 @@ import { RouterModule } from '@angular/router';
 export class AppComponent {
   public appPages = [
     { title: 'Home', url: '/folder/home', icon: 'home' },
-    { title: 'Admin', url: '/admin', icon: 'settings' },
+    { title: 'Admin', url: '/admin', icon: 'settings' }
   ];
 
   constructor(public authService: AuthService) {}

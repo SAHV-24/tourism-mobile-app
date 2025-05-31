@@ -1,4 +1,11 @@
 export interface Country {
-  idCountry: number;
-  name: string;
+  _id: string;
+  nombre: string;
+  __v?: number;
+  createdAt?: string;
+  updatedAt?: string;
+
+  // Compatibility properties
+  idCountry?: number;
+  name?: string;
 }

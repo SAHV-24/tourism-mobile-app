@@ -7,13 +7,14 @@ import { City } from '../../models/city.model';
 import { SiteService } from '../../services/site.service';
 import { CityService } from '../../services/city.service';
 import { SiteCategoryEnum } from '../../models/enums';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-site-admin',
   standalone: true,
   imports: [...COMMON_IMPORTS],
   template: `
-    <ion-content class="ion-padding">
+    <div class="ion-padding">
       <ion-grid>
         <ion-row>
           <ion-col size="12" size-md="6">
@@ -128,7 +129,7 @@ import { SiteCategoryEnum } from '../../models/enums';
           </ion-col>
         </ion-row>
       </ion-grid>
-    </ion-content>
+    </div>
   `
 })
 export class SiteAdminComponent extends BaseAdminComponent<Site> implements OnInit {
@@ -140,9 +141,10 @@ export class SiteAdminComponent extends BaseAdminComponent<Site> implements OnIn
     private cityService: CityService,
     protected override fb: FormBuilder,
     protected override alertController: AlertController,
-    protected override toastController: ToastController
+    protected override toastController: ToastController,
+    protected override authService: AuthService
   ) {
-    super(siteService, fb, alertController, toastController);
+    super(siteService, fb, alertController, toastController, authService);
   }
 
   override ngOnInit() {

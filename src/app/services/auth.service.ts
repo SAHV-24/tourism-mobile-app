@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, catchError, map, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, catchError, map, of, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { User } from '../models/user.model';
 
@@ -21,8 +21,10 @@ export interface SignupRequest {
 export class AuthService {
   private apiUrl = environment.apiUrl;
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasToken());
-  private userEmailSubject = new BehaviorSubject<string>(this.getUserEmail() || '');
+  private usernameSubject = new BehaviorSubject<string>(this.getUsername() || '');
   private userIdSubject = new BehaviorSubject<number | null>(this.getUserId());
+  private userRoleSubject = new BehaviorSubject<string>(this.getUserRole() || '');
+  private logoutEvent = new Subject<void>();
 
   constructor(
     private router: Router,
@@ -51,10 +53,10 @@ export class AuthService {
   }
 
   /**
-   * Get user email from localStorage
+   * Get username from localStorage
    */
-  private getUserEmail(): string | null {
-    return localStorage.getItem('userEmail');
+  private getUsername(): string | null {
+    return localStorage.getItem('username');
   }
 
   /**
@@ -66,10 +68,17 @@ export class AuthService {
   }
 
   /**
-   * Get user email as Observable
+   * Get user role from localStorage
    */
-  getUserEmailObservable(): Observable<string> {
-    return this.userEmailSubject.asObservable();
+  private getUserRole(): string | null {
+    return localStorage.getItem('userRole');
+  }
+
+  /**
+   * Get username as Observable
+   */
+  getUsernameObservable(): Observable<string> {
+    return this.usernameSubject.asObservable();
   }
 
   /**
@@ -80,10 +89,24 @@ export class AuthService {
   }
 
   /**
-   * Get current user email value
+   * Get user role as Observable
    */
-  get currentUserEmail(): string {
-    return this.userEmailSubject.value;
+  getUserRoleObservable(): Observable<string> {
+    return this.userRoleSubject.asObservable();
+  }
+
+  /**
+   * Get logout event as Observable
+   */
+  getLogoutEvent(): Observable<void> {
+    return this.logoutEvent.asObservable();
+  }
+
+  /**
+   * Get current username value
+   */
+  get currentUsername(): string {
+    return this.usernameSubject.value;
   }
 
   /**
@@ -94,20 +117,44 @@ export class AuthService {
   }
 
   /**
-   * Login with email and password
+   * Get current user role value
+   */
+  get currentUserRole(): string {
+    return this.userRoleSubject.value;
+  }
+
+  /**
+   * Login with username and password
    */
   login(username: string, password: string): Observable<boolean> {
-    return this.http.post<{token: string, user: User}>(`${this.apiUrl}/auth/login`, { username, password }).pipe(
+    return this.http.post<{token: string, mensaje: string}>(`${this.apiUrl}/usuarios/login`, { usuario: username, contraseña: password }).pipe(
       tap(response => {
         if (response && response.token) {
-          localStorage.setItem('isLoggedIn', 'true');
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('userEmail', response.user.email);
-          localStorage.setItem('userId', response.user.idUser.toString());
+          // Extract user information from JWT token
+          const token = response.token;
+          const tokenParts = token.split('.');
+          if (tokenParts.length === 3) {
+            try {
+              const payload = JSON.parse(atob(tokenParts[1]));
+              const userId = payload._id;
+              const userUsername = payload.usuario;
+              const userRole = payload.rol;
 
-          this.isAuthenticatedSubject.next(true);
-          this.userEmailSubject.next(response.user.email);
-          this.userIdSubject.next(response.user.idUser);
+              localStorage.setItem('isLoggedIn', 'true');
+              localStorage.setItem('token', response.token);
+              localStorage.setItem('username', userUsername || username);
+              localStorage.setItem('userId', userId);
+              localStorage.setItem('userRole', userRole);
+
+              this.isAuthenticatedSubject.next(true);
+              this.usernameSubject.next(userUsername || username);
+              this.userIdSubject.next(userId);
+              this.userRoleSubject.next(userRole);
+            } catch (e) {
+              console.error('Error parsing JWT token:', e);
+              return;
+            }
+          }
         }
       }),
       map(response => !!response.token),
@@ -135,7 +182,7 @@ export class AuthService {
    * Sign up a new user using the new endpoint
    */
   signup(signupData: SignupRequest): Observable<boolean> {
-    return this.http.post<any>('/api/usuarios/signup', signupData).pipe(
+    return this.http.post<any>(`${this.apiUrl}/usuarios/signup`, signupData).pipe(
       map(response => !!response),
       catchError(error => {
         console.error('Signup failed:', error);
@@ -148,19 +195,14 @@ export class AuthService {
    * Logout user
    */
   logout(): Observable<boolean> {
-    // Call the logout endpoint if the API requires it
-    return this.http.post<{success: boolean}>(`${this.apiUrl}/auth/logout`, {}).pipe(
-      tap(() => {
-        this.clearAuthData();
-      }),
-      map(response => response.success),
-      catchError(error => {
-        console.error('Logout failed:', error);
-        // Still clear local auth data even if the API call fails
-        this.clearAuthData();
-        return of(true);
-      })
-    );
+    // Clear local auth data immediately to ensure UI updates
+    this.clearAuthData();
+
+    // Emit logout event
+    this.logoutEvent.next();
+
+    // Return success immediately since the API doesn't have a logout endpoint
+    return of(true);
   }
 
   /**
@@ -169,12 +211,14 @@ export class AuthService {
   private clearAuthData(): void {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('token');
-    localStorage.removeItem('userEmail');
+    localStorage.removeItem('username');
     localStorage.removeItem('userId');
+    localStorage.removeItem('userRole');
 
     this.isAuthenticatedSubject.next(false);
-    this.userEmailSubject.next('');
+    this.usernameSubject.next('');
     this.userIdSubject.next(null);
+    this.userRoleSubject.next('');
     this.router.navigate(['/login']);
   }
 

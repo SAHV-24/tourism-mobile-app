@@ -8,138 +8,13 @@ import { UserService } from '../../services/user.service';
 import { SiteService } from '../../services/site.service';
 import { User } from '../../models/user.model';
 import { Site } from '../../models/site.model';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-visit-admin',
   standalone: true,
   imports: [...COMMON_IMPORTS],
-  template: `
-    <ion-content class="ion-padding">
-      <ion-grid>
-        <ion-row>
-          <ion-col size="12" size-md="6">
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>{{ isEditing ? 'Edit Visit' : 'Add Visit' }}</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <form [formGroup]="form" (ngSubmit)="isEditing ? updateItem() : createItem()">
-                  <ion-item>
-                    <ion-label position="floating">User</ion-label>
-                    <ion-select formControlName="idUser">
-                      <ion-select-option *ngFor="let user of users" [value]="user.idUser">
-                        {{ user.name }}
-                      </ion-select-option>
-                    </ion-select>
-                    <ion-note slot="error" *ngIf="form.get('idUser')?.invalid && form.get('idUser')?.touched">
-                      User is required
-                    </ion-note>
-                  </ion-item>
-
-                  <ion-item>
-                    <ion-label position="floating">Site</ion-label>
-                    <ion-select formControlName="idSite">
-                      <ion-select-option *ngFor="let site of sites" [value]="site.idSite">
-                        {{ site.name }}
-                      </ion-select-option>
-                    </ion-select>
-                    <ion-note slot="error" *ngIf="form.get('idSite')?.invalid && form.get('idSite')?.touched">
-                      Site is required
-                    </ion-note>
-                  </ion-item>
-
-                  <ion-item>
-                    <ion-label position="floating">Latitude</ion-label>
-                    <ion-input formControlName="latitude" type="number" step="0.000001"></ion-input>
-                    <ion-note slot="error" *ngIf="form.get('latitude')?.invalid && form.get('latitude')?.touched">
-                      Latitude is required
-                    </ion-note>
-                  </ion-item>
-
-                  <ion-item>
-                    <ion-label position="floating">Longitude</ion-label>
-                    <ion-input formControlName="longitude" type="number" step="0.000001"></ion-input>
-                    <ion-note slot="error" *ngIf="form.get('longitude')?.invalid && form.get('longitude')?.touched">
-                      Longitude is required
-                    </ion-note>
-                  </ion-item>
-
-                  <ion-item>
-                    <ion-label position="floating">Date</ion-label>
-                    <ion-input formControlName="date" type="date"></ion-input>
-                    <ion-note slot="error" *ngIf="form.get('date')?.invalid && form.get('date')?.touched">
-                      Date is required
-                    </ion-note>
-                  </ion-item>
-
-                  <ion-item>
-                    <ion-label position="floating">Time</ion-label>
-                    <ion-input formControlName="time" type="time"></ion-input>
-                    <ion-note slot="error" *ngIf="form.get('time')?.invalid && form.get('time')?.touched">
-                      Time is required
-                    </ion-note>
-                  </ion-item>
-
-                  <div class="ion-padding-top">
-                    <ion-button type="submit" expand="block" [disabled]="form.invalid || isLoading">
-                      {{ isEditing ? 'Update' : 'Create' }}
-                    </ion-button>
-                    <ion-button *ngIf="isEditing" type="button" expand="block" fill="outline"
-                                (click)="cancelEdit()" [disabled]="isLoading">
-                      Cancel
-                    </ion-button>
-                  </div>
-                </form>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-
-          <ion-col size="12" size-md="6">
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>Visits</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <ion-list>
-                  <ion-item *ngIf="isLoading">
-                    <ion-label>Loading...</ion-label>
-                    <ion-spinner name="dots"></ion-spinner>
-                  </ion-item>
-
-                  <ion-item *ngIf="!isLoading && items.length === 0">
-                    <ion-label>No visits found</ion-label>
-                  </ion-item>
-
-                  <ion-item *ngFor="let visit of items">
-                    <ion-label>
-                      <h2>Visit #{{ visit.idVisit }}</h2>
-                      <p>User: {{ getUserName(visit.idUser) }}</p>
-                      <p>Site: {{ getSiteName(visit.idSite) }}</p>
-                      <p>Location: {{ visit.latitude }}, {{ visit.longitude }}</p>
-                      <p>Date: {{ visit.date | date:'mediumDate' }} at {{ visit.time }}</p>
-                    </ion-label>
-                    <ion-buttons slot="end">
-                      <ion-button (click)="editItem(visit)">
-                        <ion-icon name="create-outline"></ion-icon>
-                      </ion-button>
-                      <ion-button (click)="confirmDelete(visit)">
-                        <ion-icon name="trash-outline"></ion-icon>
-                      </ion-button>
-                    </ion-buttons>
-                  </ion-item>
-                </ion-list>
-
-                <ion-button expand="block" (click)="loadItems()" [disabled]="isLoading">
-                  <ion-icon name="refresh-outline"></ion-icon>
-                  Refresh
-                </ion-button>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-content>
-  `
+  templateUrl: './visit-admin.component.html'
 })
 export class VisitAdminComponent extends BaseAdminComponent<Visit> implements OnInit {
   users: User[] = [];
@@ -151,9 +26,10 @@ export class VisitAdminComponent extends BaseAdminComponent<Visit> implements On
     private siteService: SiteService,
     protected override fb: FormBuilder,
     protected override alertController: AlertController,
-    protected override toastController: ToastController
+    protected override toastController: ToastController,
+    protected override authService: AuthService
   ) {
-    super(visitService, fb, alertController, toastController);
+    super(visitService, fb, alertController, toastController, authService);
   }
 
   override ngOnInit() {

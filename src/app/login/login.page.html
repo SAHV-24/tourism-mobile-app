@@ -10,14 +10,22 @@
 
     <form [formGroup]="loginForm" (ngSubmit)="submitForm()" novalidate>
       <ion-item lines="full">
-        <ion-label position="floating">Email</ion-label>
-        <ion-input formControlName="email" type="email" required></ion-input>
+        <ion-label position="floating">Username</ion-label>
+        <ion-input formControlName="username" type="text" required></ion-input>
       </ion-item>
+      <div *ngIf="isSubmitted && errorControl['username'].errors" class="error-message">
+        <span *ngIf="errorControl['username'].errors['required']">Username is required.</span>
+        <span *ngIf="errorControl['username'].errors['minlength']">Username must be at least 3 characters long.</span>
+      </div>
 
       <ion-item lines="full">
         <ion-label position="floating">Password</ion-label>
         <ion-input formControlName="password" type="password" required></ion-input>
       </ion-item>
+      <div *ngIf="isSubmitted && errorControl['password'].errors" class="error-message">
+        <span *ngIf="errorControl['password'].errors['required']">Password is required.</span>
+        <span *ngIf="errorControl['password'].errors['minlength']">Password must be at least 5 characters long.</span>
+      </div>
 
       <div class="ion-padding">
         <ion-button type="submit" expand="block">Login</ion-button>

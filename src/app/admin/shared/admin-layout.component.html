@@ -1,0 +1,48 @@
+<ion-content class="ion-padding">
+  <ion-router-outlet></ion-router-outlet>
+</ion-content>
+
+<ion-tabs>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="countries" [routerLink]="['/admin/countries']" routerDirection="root">
+      <ion-icon name="flag-outline"></ion-icon>
+      <ion-label>Countries</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="cities" [routerLink]="['/admin/cities']" routerDirection="root">
+      <ion-icon name="business-outline"></ion-icon>
+      <ion-label>Cities</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="sites" [routerLink]="['/admin/sites']" routerDirection="root">
+      <ion-icon name="location-outline"></ion-icon>
+      <ion-label>Sites</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="dishes" [routerLink]="['/admin/dishes']" routerDirection="root">
+      <ion-icon name="restaurant-outline"></ion-icon>
+      <ion-label>Dishes</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="users" [routerLink]="['/admin/users']" routerDirection="root">
+      <ion-icon name="people-outline"></ion-icon>
+      <ion-label>Users</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="visits" [routerLink]="['/admin/visits']" routerDirection="root">
+      <ion-icon name="footsteps-outline"></ion-icon>
+      <ion-label>Visits</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="famous" [routerLink]="['/admin/famous']" routerDirection="root">
+      <ion-icon name="star-outline"></ion-icon>
+      <ion-label>Famous</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="tags" [routerLink]="['/admin/tags']" routerDirection="root">
+      <ion-icon name="pricetag-outline"></ion-icon>
+      <ion-label>Tags</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>
+

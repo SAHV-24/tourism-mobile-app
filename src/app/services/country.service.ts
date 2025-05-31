@@ -7,7 +7,7 @@ import { Country } from '../models/country.model';
   providedIn: 'root'
 })
 export class CountryService extends BaseService<Country> {
-  protected endpoint = 'countries';
+  protected endpoint = 'paises';
 
   constructor(protected override http: HttpClient) {
     super(http);

@@ -4,7 +4,7 @@
       <ion-content>
         <ion-list id="inbox-list">
           <ion-list-header>Tourism Discovery</ion-list-header>
-          <ion-note>{{ authService.currentUserEmail }}</ion-note>
+          <ion-note>{{ authService.currentUsername }}</ion-note>
 
           @for (p of appPages; track p; let i = $index) {
             <ion-menu-toggle auto-hide="false">
@@ -16,11 +16,12 @@
           }
 
           <ion-menu-toggle auto-hide="false">
-            <ion-item button (click)="logout()" lines="none">
-              <ion-icon aria-hidden="true" slot="start" ios="log-out-outline" md="log-out-sharp"></ion-icon>
+            <ion-item routerDirection="root" lines="none" detail="false" routerLinkActive="selected" (click)="authService.logout()" [routerLink]="['/login']">
+              <ion-icon aria-hidden="true" slot="start" [ios]="'log-out-outline'" [md]="'log-out-sharp'"></ion-icon>
               <ion-label>Logout</ion-label>
             </ion-item>
           </ion-menu-toggle>
+
         </ion-list>
 
       </ion-content>

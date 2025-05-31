@@ -12,3 +12,16 @@ h1 {
 ion-button {
   margin-top: 20px;
 }
+
+.error-message {
+  color: var(--ion-color-danger);
+  font-size: 0.8rem;
+  margin: 5px 0 10px 16px;
+}
+
+/* Custom styles for loading indicator */
+.loading-indicator {
+  --background: rgba(var(--ion-color-primary-rgb), 0.1);
+  --spinner-color: var(--ion-color-primary);
+  --backdrop-opacity: 0.6;
+}

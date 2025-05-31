@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController, IonicModule, ModalController } from '@ionic/angular';
+import { AlertController, IonicModule, LoadingController, ModalController } from '@ionic/angular';
 import { AuthService, SignupRequest } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -12,15 +13,17 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, IonicModule, ReactiveFormsModule]
 })
-export class LoginPage implements OnInit {
+export class LoginPage implements OnInit, OnDestroy {
   loginForm!: FormGroup;
   isSubmitted = false;
+  private subscription: Subscription = new Subscription();
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private alertController: AlertController,
     private modalController: ModalController,
+    private loadingController: LoadingController,
     private authService: AuthService
   ) { }
 
@@ -31,10 +34,32 @@ export class LoginPage implements OnInit {
       return;
     }
 
+    this.initForm();
+
+    // Subscribe to logout event to reset form
+    this.subscription.add(
+      this.authService.getLogoutEvent().subscribe(() => {
+        this.initForm();
+      })
+    );
+  }
+
+  /**
+   * Initialize the login form with empty values
+   */
+  private initForm(): void {
     this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      username: ['', [Validators.required, Validators.minLength(3)]],
+      password: ['', [Validators.required, Validators.minLength(5)]]
     });
+    this.isSubmitted = false;
+  }
+
+  /**
+   * Clean up subscriptions when component is destroyed
+   */
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   get errorControl() {
@@ -46,17 +71,35 @@ export class LoginPage implements OnInit {
     if (!this.loginForm.valid) {
       return false;
     } else {
-      const email = this.loginForm.value.email;
+      // Show loading indicator
+      const loading = await this.loadingController.create({
+        message: 'Logging in...',
+        spinner: 'circles',
+        cssClass: 'loading-indicator'
+      });
+      await loading.present();
+
+      const username = this.loginForm.value.username;
       const password = this.loginForm.value.password;
 
-      this.authService.login(email, password).subscribe(success => {
-        if (success) {
-          // Navigate to main page
-          this.router.navigate(['/folder/inbox']);
-        } else {
+      this.authService.login(username, password).subscribe(
+        success => {
+          // Hide loading indicator
+          loading.dismiss();
+
+          if (success) {
+            // Navigate to main page
+            this.router.navigate(['/folder/inbox']);
+          } else {
+            this.showLoginFailedAlert();
+          }
+        },
+        error => {
+          // Hide loading indicator in case of error
+          loading.dismiss();
           this.showLoginFailedAlert();
         }
-      });
+      );
       return true;
     }
   }
@@ -64,7 +107,7 @@ export class LoginPage implements OnInit {
   async showLoginFailedAlert() {
     const alert = await this.alertController.create({
       header: 'Login Failed',
-      message: 'Invalid email or password',
+      message: 'Invalid username or password',
       buttons: ['OK']
     });
     await alert.present();
@@ -114,12 +157,31 @@ export class LoginPage implements OnInit {
               rol: 'Administrador' // Using the role from the example
             };
 
-            this.authService.signup(signupData).subscribe(success => {
-              if (success) {
-                this.showRegistrationSuccessAlert();
-              } else {
-                this.showRegistrationFailedAlert();
-              }
+            // Show loading indicator
+            this.loadingController.create({
+              message: 'Registering...',
+              spinner: 'circles',
+              cssClass: 'loading-indicator'
+            }).then(loading => {
+              loading.present();
+
+              this.authService.signup(signupData).subscribe(
+                success => {
+                  // Hide loading indicator
+                  loading.dismiss();
+
+                  if (success) {
+                    this.showRegistrationSuccessAlert();
+                  } else {
+                    this.showRegistrationFailedAlert();
+                  }
+                },
+                error => {
+                  // Hide loading indicator in case of error
+                  loading.dismiss();
+                  this.showRegistrationFailedAlert();
+                }
+              );
             });
           }
         }

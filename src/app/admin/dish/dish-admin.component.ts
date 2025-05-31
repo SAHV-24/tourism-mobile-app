@@ -6,13 +6,14 @@ import { Dish } from '../../models/dish.model';
 import { DishService } from '../../services/dish.service';
 import { SiteService } from '../../services/site.service';
 import { Site } from '../../models/site.model';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-dish-admin',
   standalone: true,
   imports: [...COMMON_IMPORTS],
   template: `
-    <ion-content class="ion-padding">
+    <div class="ion-padding">
       <ion-grid>
         <ion-row>
           <ion-col size="12" size-md="6">
@@ -114,7 +115,7 @@ import { Site } from '../../models/site.model';
           </ion-col>
         </ion-row>
       </ion-grid>
-    </ion-content>
+    </div>
   `
 })
 export class DishAdminComponent extends BaseAdminComponent<Dish> {
@@ -125,9 +126,10 @@ export class DishAdminComponent extends BaseAdminComponent<Dish> {
     private siteService: SiteService,
     protected override fb: FormBuilder,
     protected override alertController: AlertController,
-    protected override toastController: ToastController
+    protected override toastController: ToastController,
+    protected override authService: AuthService
   ) {
-    super(dishService, fb, alertController, toastController);
+    super(dishService, fb, alertController, toastController, authService);
   }
 
   override ngOnInit() {

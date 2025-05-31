@@ -2,7 +2,8 @@ import { Directive, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule, AlertController, ToastController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-import { BaseService } from '../../services/base.service';
+import { BaseService } from '../../services';
+import { AuthService } from '../../services';
 
 @Directive()
 export abstract class BaseAdminComponent<T> implements OnInit {
@@ -16,9 +17,17 @@ export abstract class BaseAdminComponent<T> implements OnInit {
     protected service: BaseService<T>,
     protected fb: FormBuilder,
     protected alertController: AlertController,
-    protected toastController: ToastController
+    protected toastController: ToastController,
+    protected authService: AuthService
   ) {
     this.form = this.buildForm();
+  }
+
+  /**
+   * Check if the user has administrator role
+   */
+  isAdmin(): boolean {
+    return this.authService.currentUserRole === 'Administrador';
   }
 
   ngOnInit() {
@@ -68,6 +77,11 @@ export abstract class BaseAdminComponent<T> implements OnInit {
       return;
     }
 
+    if (!this.isAdmin()) {
+      this.showToast('You do not have permission to create items', 'danger');
+      return;
+    }
+
     try {
       this.isLoading = true;
       this.service.create(this.form.value).subscribe({
@@ -103,6 +117,11 @@ export abstract class BaseAdminComponent<T> implements OnInit {
   updateItem() {
     if (this.form.invalid || !this.currentItem) {
       this.showToast('Please fill all required fields', 'warning');
+      return;
+    }
+
+    if (!this.isAdmin()) {
+      this.showToast('You do not have permission to update items', 'danger');
       return;
     }
 
@@ -167,6 +186,11 @@ export abstract class BaseAdminComponent<T> implements OnInit {
    * Delete item
    */
   deleteItem(item: T) {
+    if (!this.isAdmin()) {
+      this.showToast('You do not have permission to delete items', 'danger');
+      return;
+    }
+
     try {
       const id = this.getItemId(item);
       this.isLoading = true;
@@ -206,6 +230,11 @@ export abstract class BaseAdminComponent<T> implements OnInit {
    * Edit item
    */
   editItem(item: T) {
+    if (!this.isAdmin()) {
+      this.showToast('You do not have permission to edit items', 'danger');
+      return;
+    }
+
     this.currentItem = item;
     this.isEditing = true;
     this.populateForm(item);
@@ -262,7 +291,7 @@ export abstract class BaseAdminComponent<T> implements OnInit {
    * Get item id
    * This method should be implemented by child classes
    */
-  protected abstract getItemId(item: T): number;
+  protected abstract getItemId(item: T): number | string;
 }
 
 // Common imports for admin components
