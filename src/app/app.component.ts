@@ -21,6 +21,7 @@ export class AppComponent {
     { title: 'Sites', url: '/user/sites', icon: 'location' },
     { title: 'Favorites', url: '/user/favorites', icon: 'heart' },
     { title: 'Routes', url: '/user/routes', icon: 'map' },
+    { title: 'My Visits', url: '/user/my-visits', icon: 'time' },
   ];
 
   constructor(public authService: AuthService) {}
@@ -29,7 +30,7 @@ export class AppComponent {
     if (this.authService.isAdmin()) {
       return this.appPages;
     }
-    return this.appPages.filter(page => page.url !== '/admin');
+    return this.appPages.filter((page) => page.url !== '/admin');
   }
 
   logout() {
