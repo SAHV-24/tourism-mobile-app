@@ -51,41 +51,28 @@ exports.usuariosMasVisitas = async (req, res) => {
   }
 };
 
-// 3. Platos más taggeados, filtrando por país o ciudad
-exports.platosMasTaggeados = async (req, res) => {
+// 3. Platos por país y/o ciudad
+exports.platosPorPaisCiudad = async (req, res) => {
   try {
     const { paisId, ciudadId } = req.query;
-    let match = {};
-    if (ciudadId) {
-      match = { ...match, "famoso.ciudadNacimiento": ciudadId };
-    }
+    let ciudadFilter = {};
     if (paisId) {
-      match = { ...match, "famoso.ciudadNacimiento.pais": paisId };
+      ciudadFilter.pais = paisId;
     }
-    // Tags agrupados por plato
-    const resultado = await Tag.aggregate([
-      { $lookup: {
-          from: "famosos",
-          localField: "famoso",
-          foreignField: "_id",
-          as: "famoso"
-      }},
-      { $unwind: "$famoso" },
-      ...(ciudadId || paisId ? [{ $match: match }] : []),
-      { $group: { _id: "$plato", totalTags: { $sum: 1 } } },
-      { $sort: { totalTags: -1 } },
-      { $lookup: {
-          from: "platos",
-          localField: "_id",
-          foreignField: "_id",
-          as: "plato"
-      }},
-      { $unwind: "$plato" },
-      { $project: { _id: 0, plato: 1, totalTags: 1 } }
-    ]);
-    res.json(resultado);
+    if (ciudadId) {
+      ciudadFilter._id = ciudadId;
+    }
+    // Buscar ciudades que cumplen el filtro
+    const ciudades = await Ciudad.find(ciudadFilter).select('_id');
+    const ciudadesIds = ciudades.map(c => c._id);
+    // Buscar sitios en esas ciudades
+    const sitios = await Sitio.find({ ciudad: { $in: ciudadesIds } }).select('_id');
+    const sitiosIds = sitios.map(s => s._id);
+    // Buscar platos en esos sitios
+    const platos = await Plato.find({ sitio: { $in: sitiosIds } });
+    res.json(platos);
   } catch (error) {
-    res.status(500).json({ mensaje: 'Error en la consulta', error: error.message });
+    res.status(500).json({ mensaje: 'Error al buscar platos', error: error.message });
   }
 };
 

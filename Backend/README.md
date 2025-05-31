@@ -88,14 +88,20 @@ You can explore all endpoints, see required parameters, try requests, and view e
 
 ## API Endpoints
 
-### Countries (Read-only)
+### Countries (CRUD)
 - `GET /api/paises` - Get all countries
 - `GET /api/paises/:id` - Get country by ID
+- `POST /api/paises` - Create new country
+- `PUT /api/paises/:id` - Update country
+- `DELETE /api/paises/:id` - Delete country
 
-### Cities (Read-only)
+### Cities (CRUD)
 - `GET /api/ciudades` - Get all cities
 - `GET /api/ciudades/:id` - Get city by ID
 - `GET /api/ciudades/pais/:paisId` - Get cities by country
+- `POST /api/ciudades` - Create new city
+- `PUT /api/ciudades/:id` - Update city
+- `DELETE /api/ciudades/:id` - Delete city
 
 ### Sites (CRUD)
 - `GET /api/sitios` - Get all sites
@@ -109,6 +115,8 @@ You can explore all endpoints, see required parameters, try requests, and view e
 - `GET /api/platos` - Get all dishes
 - `GET /api/platos/:id` - Get dish by ID
 - `GET /api/platos/sitio/:sitioId` - Get dishes by site
+- `GET /api/platos/ciudad/:ciudadId` - Get dishes by city
+- `GET /api/platos/pais/:paisId` - Get dishes by country
 
 ### Famous People (Read-only)
 - `GET /api/famosos` - Get all famous people
@@ -135,10 +143,16 @@ You can explore all endpoints, see required parameters, try requests, and view e
 - `GET /api/visitas` - Get all visits
 - `GET /api/visitas/:id` - Get visit by ID
 - `GET /api/visitas/usuario/:usuarioId` - Get visits by user
-- `GET /api/visitas/top-sitios/:paisId` - Get top 10 most visited sites by country
 - `POST /api/visitas` - Create new visit
 - `PUT /api/visitas/:id` - Update visit
 - `DELETE /api/visitas/:id` - Delete visit
+
+### Queries & Statistics
+- `GET /api/queries/famosos-mas-taggeados` - Most tagged famous people
+- `GET /api/queries/usuarios-mas-visitas` - Users with most visits
+- `GET /api/queries/platos-por-ubicacion?paisId=&ciudadId=` - Dishes by country and/or city
+- `GET /api/queries/platos-por-usuarios-unicos?n=` - Dishes tagged/visited by more than N unique users
+- `GET /api/queries/top-sitios?paisId=` - Top 10 most visited sites by country
 
 ## Initial Data
 

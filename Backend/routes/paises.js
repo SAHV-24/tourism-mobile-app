@@ -57,4 +57,45 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// POST - Crear nuevo país (solo admin)
+router.post('/', async (req, res) => {
+  try {
+    const nuevoPais = new Pais(req.body);
+    const paisGuardado = await nuevoPais.save();
+    res.status(201).json(paisGuardado);
+  } catch (error) {
+    res.status(400).json({ mensaje: 'Error al crear país', error: error.message });
+  }
+});
+
+// PUT - Actualizar país (solo admin)
+router.put('/:id', async (req, res) => {
+  try {
+    const paisActualizado = await Pais.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+    if (!paisActualizado) {
+      return res.status(404).json({ mensaje: 'País no encontrado' });
+    }
+    res.json(paisActualizado);
+  } catch (error) {
+    res.status(400).json({ mensaje: 'Error al actualizar país', error: error.message });
+  }
+});
+
+// DELETE - Eliminar país (solo admin)
+router.delete('/:id', async (req, res) => {
+  try {
+    const paisEliminado = await Pais.findByIdAndDelete(req.params.id);
+    if (!paisEliminado) {
+      return res.status(404).json({ mensaje: 'País no encontrado' });
+    }
+    res.json({ mensaje: 'País eliminado correctamente' });
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al eliminar país', error: error.message });
+  }
+});
+
 module.exports = router;

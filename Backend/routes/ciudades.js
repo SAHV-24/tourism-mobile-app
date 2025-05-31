@@ -88,4 +88,46 @@ router.get('/pais/:paisId', async (req, res) => {
   }
 });
 
+// POST - Crear nueva ciudad (solo admin)
+router.post('/', async (req, res) => {
+  try {
+    const nuevaCiudad = new Ciudad(req.body);
+    const ciudadGuardada = await nuevaCiudad.save();
+    const ciudadCompleta = await Ciudad.findById(ciudadGuardada._id).populate('pais', 'nombre');
+    res.status(201).json(ciudadCompleta);
+  } catch (error) {
+    res.status(400).json({ mensaje: 'Error al crear ciudad', error: error.message });
+  }
+});
+
+// PUT - Actualizar ciudad (solo admin)
+router.put('/:id', async (req, res) => {
+  try {
+    const ciudadActualizada = await Ciudad.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    ).populate('pais', 'nombre');
+    if (!ciudadActualizada) {
+      return res.status(404).json({ mensaje: 'Ciudad no encontrada' });
+    }
+    res.json(ciudadActualizada);
+  } catch (error) {
+    res.status(400).json({ mensaje: 'Error al actualizar ciudad', error: error.message });
+  }
+});
+
+// DELETE - Eliminar ciudad (solo admin)
+router.delete('/:id', async (req, res) => {
+  try {
+    const ciudadEliminada = await Ciudad.findByIdAndDelete(req.params.id);
+    if (!ciudadEliminada) {
+      return res.status(404).json({ mensaje: 'Ciudad no encontrada' });
+    }
+    res.json({ mensaje: 'Ciudad eliminada correctamente' });
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al eliminar ciudad', error: error.message });
+  }
+});
+
 module.exports = router;

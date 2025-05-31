@@ -24,9 +24,9 @@
  *       200:
  *         description: Lista de usuarios ordenados por cantidad de visitas
  *
- * /api/queries/platos-mas-taggeados:
+ * /api/queries/platos-por-ubicacion:
  *   get:
- *     summary: Platos más taggeados, filtrando por país o ciudad
+ *     summary: Buscar platos por país y/o ciudad
  *     tags: [Consultas]
  *     security:
  *       - bearerAuth: []
@@ -45,7 +45,7 @@
  *         description: ID de la ciudad (opcional)
  *     responses:
  *       200:
- *         description: Lista de platos ordenados por cantidad de tags
+ *         description: Lista de platos encontrados
  *
  * /api/queries/platos-por-usuarios-unicos:
  *   get:
@@ -92,8 +92,8 @@ router.get('/famosos-mas-taggeados', queriesController.famososMasTaggeados);
 // 2. Usuarios con más visitas
 router.get('/usuarios-mas-visitas', queriesController.usuariosMasVisitas);
 
-// 3. Platos más taggeados, filtrando por país o ciudad (query params: paisId, ciudadId)
-router.get('/platos-mas-taggeados', queriesController.platosMasTaggeados);
+// 3. Buscar platos por país y/o ciudad (query params: paisId, ciudadId)
+router.get('/platos-por-ubicacion', queriesController.platosPorPaisCiudad);
 
 // 4. Platos registrados en visitas o tags por más de N usuarios (query param: n)
 router.get('/platos-por-usuarios-unicos', queriesController.platosPorUsuariosUnicos);

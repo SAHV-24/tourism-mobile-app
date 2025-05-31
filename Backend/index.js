@@ -87,6 +87,127 @@ const swaggerDefinition = {
         bearerFormat: "JWT",
       },
     },
+    schemas: {
+      Pais: {
+        type: "object",
+        properties: {
+          _id: { type: "string" },
+          nombre: { type: "string" },
+          createdAt: { type: "string", format: "date-time" },
+          updatedAt: { type: "string", format: "date-time" }
+        },
+        required: ["nombre"]
+      },
+      Ciudad: {
+        type: "object",
+        properties: {
+          _id: { type: "string" },
+          nombre: { type: "string" },
+          pais: { type: "string", description: "ObjectId de Pais" },
+          createdAt: { type: "string", format: "date-time" },
+          updatedAt: { type: "string", format: "date-time" }
+        },
+        required: ["nombre", "pais"]
+      },
+      Sitio: {
+        type: "object",
+        properties: {
+          _id: { type: "string" },
+          nombre: { type: "string" },
+          ubicacion: { type: "string" },
+          ciudad: { type: "string", description: "ObjectId de Ciudad" },
+          tipoSitio: {
+            type: "string",
+            enum: [
+              "Restaurante", "Hotel", "Atracción Turística", "Museo", "Parque", "Monumento", "Centro Comercial", "Teatro", "Estadio", "Otro"
+            ]
+          },
+          createdAt: { type: "string", format: "date-time" },
+          updatedAt: { type: "string", format: "date-time" }
+        },
+        required: ["nombre", "ubicacion", "ciudad", "tipoSitio"]
+      },
+      Plato: {
+        type: "object",
+        properties: {
+          _id: { type: "string" },
+          nombre: { type: "string" },
+          foto: { type: "string" },
+          sitio: { type: "string", description: "ObjectId de Sitio" },
+          precio: { type: "number", minimum: 0 },
+          createdAt: { type: "string", format: "date-time" },
+          updatedAt: { type: "string", format: "date-time" }
+        },
+        required: ["nombre", "foto", "sitio", "precio"]
+      },
+      Famoso: {
+        type: "object",
+        properties: {
+          _id: { type: "string" },
+          nombre: { type: "string" },
+          ciudadNacimiento: { type: "string", description: "ObjectId de Ciudad" },
+          actividad: {
+            type: "string",
+            enum: [
+              "Actor", "Actriz", "Cantante", "Deportista", "Político", "Escritor", "Artista", "Científico", "Empresario", "Otro"
+            ]
+          },
+          foto: { type: "string" },
+          descripcion: { type: "string" },
+          createdAt: { type: "string", format: "date-time" },
+          updatedAt: { type: "string", format: "date-time" }
+        },
+        required: ["nombre", "ciudadNacimiento", "actividad", "foto", "descripcion"]
+      },
+      Usuario: {
+        type: "object",
+        properties: {
+          _id: { type: "string" },
+          nombre: { type: "string" },
+          apellido: { type: "string" },
+          correo: { type: "string" },
+          usuario: { type: "string" },
+          rol: {
+            type: "string",
+            enum: ["Administrador", "UsuarioDefault"],
+            default: "UsuarioDefault"
+          },
+          createdAt: { type: "string", format: "date-time" },
+          updatedAt: { type: "string", format: "date-time" }
+        },
+        required: ["nombre", "apellido", "correo", "usuario", "rol"]
+      },
+      Tag: {
+        type: "object",
+        properties: {
+          _id: { type: "string" },
+          usuario: { type: "string", description: "ObjectId de Usuario" },
+          famoso: { type: "string", description: "ObjectId de Famoso" },
+          latitud: { type: "number" },
+          longitud: { type: "number" },
+          fecha: { type: "string", format: "date-time" },
+          fotoUrl: { type: "string" },
+          comentario: { type: "string" },
+          createdAt: { type: "string", format: "date-time" },
+          updatedAt: { type: "string", format: "date-time" }
+        },
+        required: ["usuario", "famoso", "latitud", "longitud", "fotoUrl"]
+      },
+      Visita: {
+        type: "object",
+        properties: {
+          _id: { type: "string" },
+          usuario: { type: "string", description: "ObjectId de Usuario" },
+          sitio: { type: "string", description: "ObjectId de Sitio" },
+          latitud: { type: "number" },
+          longitud: { type: "number" },
+          fechaYHora: { type: "string", format: "date-time" },
+          createdAt: { type: "string", format: "date-time" },
+          updatedAt: { type: "string", format: "date-time" }
+        },
+        required: ["usuario", "sitio", "latitud", "longitud"]
+      }
+    },
   },
   security: [{ bearerAuth: [] }],
 };
