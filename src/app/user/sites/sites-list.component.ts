@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -8,6 +8,7 @@ import { City } from 'src/app/models/city.model';
 import { SiteService } from 'src/app/services/site.service';
 import { CountryService } from 'src/app/services/country.service';
 import { CityService } from 'src/app/services/city.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-sites-list',
@@ -16,7 +17,7 @@ import { CityService } from 'src/app/services/city.service';
   templateUrl: './sites-list.component.html',
   styleUrls: ['./sites-list.component.scss']
 })
-export class SitesListComponent implements OnInit {
+export class SitesListComponent implements OnInit, OnDestroy {
   sites: Site[] = [];
   filteredSites: Site[] = [];
   countries: Country[] = [];
@@ -24,17 +25,33 @@ export class SitesListComponent implements OnInit {
   selectedCountry: string | null = null;
   selectedCity: string | null = null;
   favoritos: string[] = [];
+  canGoBack = false;
 
   constructor(
     private siteService: SiteService,
     private countryService: CountryService,
-    private cityService: CityService
+    private cityService: CityService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     this.loadFavoritos();
     this.loadCountries();
     this.loadSites();
+    this.setCanGoBack();
+    window.addEventListener('popstate', this.setCanGoBack.bind(this));
+  }
+
+  setCanGoBack() {
+    // navigationId solo existe si la navegación fue por Angular Router
+    // Si navigationId no existe, es acceso directo o recarga (no hay back)
+    const navId = window.history.state && window.history.state.navigationId;
+    this.canGoBack = typeof navId === 'number' && navId > 2;
+    this.cdr.detectChanges();
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('popstate', this.setCanGoBack.bind(this));
   }
 
   loadCountries() {

@@ -81,19 +81,27 @@ export class VisitAdminComponent extends BaseAdminComponent<Visit> implements On
       idSite: [null, [Validators.required]],
       latitude: [null, [Validators.required]],
       longitude: [null, [Validators.required]],
-      date: [new Date().toISOString().split('T')[0], [Validators.required]]
+      date: [new Date().toISOString().split('T')[0], [Validators.required]],
+      time: [null, [Validators.required]]
     });
   }
 
   protected populateForm(item: Visit): void {
-    const date = item.fechaYHora;
-
+    const dateTime = item.fechaYHora;
+    let date = null;
+    let time = null;
+    if (dateTime) {
+      const dt = new Date(dateTime);
+      date = dt.toISOString().split('T')[0];
+      time = dt.toISOString().split('T')[1]?.substring(0,5) || null;
+    }
     this.form.patchValue({
       idUser: item.usuario,
       idSite: item.sitio,
       latitude: item.latitud,
       longitude: item.longitud,
-      date: date
+      date: date,
+      time: time
     });
   }
 

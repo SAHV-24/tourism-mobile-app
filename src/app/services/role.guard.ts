@@ -27,14 +27,6 @@ export class RoleGuard implements CanActivate {
     const requiredRole = route.data['requiredRole'] as string;
     const userRole = this.authService.currentUserRole;
 
-    console.log('RoleGuard check:', {
-      url: state.url,
-      requiredRole,
-      userRole,
-      isAdmin: userRole === 'Administrador',
-      token: this.authService.getToken()
-    });
-
     if (requiredRole && userRole !== requiredRole) {
       console.error(`Access denied: Required role '${requiredRole}', user role '${userRole}'`);
       this.router.navigate(['/folder/home']);

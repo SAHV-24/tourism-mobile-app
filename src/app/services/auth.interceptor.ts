@@ -6,16 +6,13 @@ import { AuthService } from './auth.service';
 export function authInterceptorFn(request: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
   const authService = inject(AuthService);
   const token = authService.getToken();
-  console.log('[authInterceptorFn] Token:', token);
   if (token) {
     const authReq = request.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`
       }
     });
-    console.log('[authInterceptorFn] Request with Authorization header:', authReq);
     return next(authReq);
   }
-  console.log('[authInterceptorFn] No token, sending original request:', request);
   return next(request);
 }

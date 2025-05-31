@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { Router } from '@angular/router';
 import { Site } from 'src/app/models/site.model';
 import { Country } from 'src/app/models/country.model';
 import { City } from 'src/app/models/city.model';
@@ -28,7 +29,8 @@ export class FavoritesComponent implements OnInit {
   constructor(
     private siteService: SiteService,
     private countryService: CountryService,
-    private cityService: CityService
+    private cityService: CityService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -148,8 +150,8 @@ export class FavoritesComponent implements OnInit {
         routes.push(newRoute);
       }
       localStorage.setItem('user_routes', JSON.stringify(routes));
-      // Redirigir a la vista de rutas si lo deseas
-      // this.router.navigate(['/user/routes']);
+      // Redirigir a la vista de rutas después de crear la ruta usando Router
+      this.router.navigate(['/user/routes']);
     }, err => {
       alert('Could not get your location');
     });
