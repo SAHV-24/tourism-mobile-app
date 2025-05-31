@@ -6,7 +6,7 @@
     "logLevel": "debug"
   },
   "/api": {
-    "target": "http://localhost:3200",
+    "target": "https://tourism-mobile-app.onrender.com",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
