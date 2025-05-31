@@ -16,6 +16,7 @@ export class AppComponent {
     { title: 'Home', url: '/folder/home', icon: 'home' },
     { title: 'Admin', url: '/admin', icon: 'settings' },
     { title: 'Sites', url: '/user/sites', icon: 'location' },
+    { title: 'Favorites', url: '/user/favorites', icon: 'heart' }
   ];
 
   constructor(public authService: AuthService) {}

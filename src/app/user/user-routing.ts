@@ -1,6 +1,8 @@
 import {Routes} from "@angular/router";
 import {RoleGuard} from "../services/role.guard";
 import {SitesComponent} from "./sites/sites.component";
+import {SitesListComponent} from "./sites/sites-list.component";
+import {FavoritesComponent} from "./favorites/favorites.component";
 
 export const USER_ROUTES: Routes = [
   {
@@ -9,7 +11,8 @@ export const USER_ROUTES: Routes = [
     data: { requiredRole: 'Administrador' },
     children: [
       { path: '', redirectTo: 'countries', pathMatch: 'full' },
-      { path: 'sites', component: SitesComponent }
+      { path: 'sites', component: SitesListComponent },
+      { path: 'favorites', component: FavoritesComponent },
     ]
   }
 ];

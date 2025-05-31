@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Listado de Sitios</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" size="small" (click)="clearFilters()">
+        Clear
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label>País</ion-label>
+    <ion-select [(ngModel)]="selectedCountry" (ionChange)="onCountryChange()">
+      <ion-select-option *ngFor="let country of countries" [value]="country._id">{{ country.nombre }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label>Ciudad</ion-label>
+    <ion-select [(ngModel)]="selectedCity" (ionChange)="onCityChange()">
+      <ion-select-option *ngFor="let city of cities" [value]="city._id">{{ city.nombre }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-list>
+    <ion-item *ngFor="let site of filteredSites">
+      <ion-label>
+        <h2>{{ site.nombre }}</h2>
+        <p>{{ site.ubicacion }}</p>
+      </ion-label>
+      <ion-button fill="clear" slot="end" (click)="toggleFavorito(site._id)">
+        <ion-icon [name]="esFavorito(site._id) ? 'heart' : 'heart-outline'" color="danger"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>
