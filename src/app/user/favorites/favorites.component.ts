@@ -100,4 +100,58 @@ export class FavoritesComponent implements OnInit {
     this.cities = [];
     this.filterFavorites();
   }
+
+  // El botón debe estar habilitado solo si hay favoritos filtrados Y país y ciudad están seleccionados
+  get canCreateRoute(): boolean {
+    return (
+      this.selectedCountry !== null &&
+      this.selectedCity !== null &&
+      this.filteredFavorites.length > 0
+    );
+  }
+
+  createRoute() {
+    // Validar que país y ciudad estén seleccionados
+    if (!this.selectedCountry || !this.selectedCity) {
+      alert('Please select both country and city to create a route.');
+      return;
+    }
+    if (this.filteredFavorites.length === 0) return;
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser');
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(position => {
+      const newRoute = {
+        id: Date.now(),
+        cityId: this.selectedCity,
+        createdAt: new Date().toISOString(),
+        start: {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        },
+        sites: this.filteredFavorites.map(site => ({
+          _id: site._id,
+          nombre: site.nombre,
+          ubicacion: site.ubicacion,
+          ciudad: site.ciudad,
+          // Si tienes lat/lng en el modelo de sitio, agrégalos aquí
+        }))
+      };
+      const routesStr = localStorage.getItem('user_routes');
+      let routes = routesStr ? JSON.parse(routesStr) : [];
+      // Remplazar la ruta si ya existe una para la ciudad seleccionada
+      const idx = routes.findIndex((r: any) => r.cityId === this.selectedCity);
+      if (idx > -1) {
+        routes[idx] = newRoute;
+      } else {
+        routes.push(newRoute);
+      }
+      localStorage.setItem('user_routes', JSON.stringify(routes));
+      // Redirigir a la vista de rutas si lo deseas
+      // this.router.navigate(['/user/routes']);
+    }, err => {
+      alert('Could not get your location');
+    });
+  }
 }

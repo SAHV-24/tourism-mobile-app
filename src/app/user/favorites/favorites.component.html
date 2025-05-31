@@ -37,7 +37,7 @@
 
 <ion-footer>
   <ion-toolbar>
-    <ion-button expand="block" color="primary" [disabled]="filteredFavorites.length === 0">
+    <ion-button expand="block" color="primary" [disabled]="!canCreateRoute" (click)="createRoute()">
       Create route
     </ion-button>
   </ion-toolbar>
