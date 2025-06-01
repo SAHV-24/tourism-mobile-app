@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/user/sites"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Ruta en el mapa</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div style="height: 100%; width: 100%;">
+    <google-map
+      height="100vh"
+      width="100%"
+      [center]="center"
+      [options]="mapOptions">
+    </google-map>
+  </div>
+</ion-content>
+

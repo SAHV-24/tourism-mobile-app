@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  backend:
+    image: sergioherrera24/mobile-backend:2
+    container_name: tourism-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=development
+      - PORT=8080
+      - MONGO_ATLAS_URI=${MONGO_ATLAS_URI}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}  
+    env_file:
+      - ./.env
+    networks:
+      - tourism-network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./Frontend
+    container_name: tourism-frontend
+    ports:
+      - "8100:80"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - backend
+    networks:
+      - tourism-network
+    restart: unless-stopped
+
+networks:
+  tourism-network:
+    driver: bridge

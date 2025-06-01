@@ -1,0 +1,47 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="home-title">🔎Tourism</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="home-carousel-content">
+  <ion-grid>
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="12" size-md="8" class="home-col-padding">
+        <swiper-container class="home-swiper">
+          <ng-container *ngFor="let card of queryCards; let i = index">
+            <swiper-slide>
+              <ion-card class="home-query-card">
+                <ion-card-header>
+                  <ion-card-title class="home-card-title">
+                    <span *ngIf="i === 0">🌟</span>
+                    <span *ngIf="i === 1">👤</span>
+                    <span *ngIf="i === 2">🍽️</span>
+                    <span *ngIf="i === 3">👥</span>
+                    <span *ngIf="i === 4">🏆</span>
+                    {{ card.title }}
+                  </ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <p>{{ card.description }}</p>
+                  <ion-buttons class="ion-justify-content-center">
+                    <ion-button color="primary" (click)="goTo(card.route)">
+                      <ion-icon
+                        slot="start"
+                        name="arrow-forward-outline"
+                      ></ion-icon>
+                      Go
+                    </ion-button>
+                  </ion-buttons>
+                </ion-card-content>
+              </ion-card>
+            </swiper-slide>
+          </ng-container>
+        </swiper-container>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
