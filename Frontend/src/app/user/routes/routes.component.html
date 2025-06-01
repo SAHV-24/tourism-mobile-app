@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ng-container *ngIf="canGoBack; else menuButton">
+        <ion-back-button defaultHref="/user/sites"></ion-back-button>
+      </ng-container>
+      <ng-template #menuButton>
+        <ion-menu-button></ion-menu-button>
+      </ng-template>
+    </ion-buttons>
+    <ion-title>My Routes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ng-container *ngIf="routes.length > 0; else noRoutes">
+    <ion-list>
+      <ion-item *ngFor="let route of routes">
+        <ion-label>
+          <h2>{{ getCityName(route) }}</h2>
+          <div class="timeline">
+            <ion-chip *ngFor="let site of route.sites">
+              <ion-label>{{ site.nombre }}</ion-label>
+            </ion-chip>
+          </div>
+        </ion-label>
+        <ion-button fill="clear" color="primary" (click)="viewOnMap(route)">
+          View on map
+        </ion-button>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+  <ng-template #noRoutes>
+    <ion-text color="medium">
+      <p style="text-align:center;margin-top:2em;">No routes created yet.</p>
+    </ion-text>
+  </ng-template>
+</ion-content>
+
+<style>
+.timeline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin-top: 0.5em;
+}
+</style>
+

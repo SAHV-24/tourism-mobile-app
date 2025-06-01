@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/folder/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Famous People</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ng-container *ngIf="loading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Loading famous people...</p>
+  </ng-container>
+  <ng-container *ngIf="error">
+    <ion-text color="danger">{{ error }}</ion-text>
+  </ng-container>
+  <ion-list *ngIf="!loading && !error">
+    <ion-item *ngFor="let famous of famousList">
+      <ion-label>
+        <h2>{{ famous.nombre }}</h2>
+        <p *ngIf="famous.descripcion">{{ famous.descripcion }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <div *ngIf="!loading && !error && !famousList.length" class="no-famous">
+    <ion-text color="medium">No famous people found.</ion-text>
+  </div>
+</ion-content>

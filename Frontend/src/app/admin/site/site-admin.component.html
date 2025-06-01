@@ -1,0 +1,134 @@
+<div class="admin-scroll-container">
+  <div class="ion-padding">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" size-md="6">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>{{ isEditing ? 'Edit Site' : 'Add Site' }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <form [formGroup]="form" (ngSubmit)="isEditing ? updateItem() : createItem()">
+                <ion-item>
+                  <ion-label position="floating">Name</ion-label>
+                  <ion-input formControlName="nombre" type="text"></ion-input>
+                  <ion-note slot="error" *ngIf="form.get('nombre')?.invalid && form.get('nombre')?.touched">
+                    Name is required
+                  </ion-note>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label position="floating">City</ion-label>
+                  <ion-select formControlName="ciudad">
+                    <ion-select-option *ngFor="let city of cities" [value]="city._id">
+                      {{ city.nombre }}
+                    </ion-select-option>
+                  </ion-select>
+                  <ion-note slot="error" *ngIf="form.get('ciudad')?.invalid && form.get('ciudad')?.touched">
+                    City is required
+                  </ion-note>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label position="floating">Category</ion-label>
+                  <ion-select formControlName="tipoSitio">
+                    <ion-select-option *ngFor="let category of categories" [value]="category">
+                      {{ category }}
+                    </ion-select-option>
+                  </ion-select>
+                  <ion-note slot="error" *ngIf="form.get('tipoSitio')?.invalid && form.get('tipoSitio')?.touched">
+                    Tipo de sitio es requerido
+                  </ion-note>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label position="floating">Ubication</ion-label>
+                  <ion-input formControlName="ubicacion" type="text"></ion-input>
+                  <ion-note slot="error" *ngIf="form.get('ubicacion')?.invalid && form.get('ubicacion')?.touched">
+                    Latitude is required
+                  </ion-note>
+                </ion-item>
+
+                <div class="ion-padding-top">
+                  <ion-button type="submit" expand="block" [disabled]="form.invalid || isLoading">
+                    {{ isEditing ? 'Update' : 'Create' }}
+                  </ion-button>
+                  <ion-button *ngIf="isEditing" type="button" expand="block" fill="outline"
+                              (click)="cancelEdit()" [disabled]="isLoading">
+                    Cancel
+                  </ion-button>
+                </div>
+              </form>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <ion-col size="12" size-md="6">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Filtros</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-item>
+                <ion-label>País</ion-label>
+                <ion-select [(ngModel)]="selectedCountry" (ionChange)="onCountryChange()" interface="popover">
+                  <ion-select-option [value]="null">Todos</ion-select-option>
+                  <ion-select-option *ngFor="let country of countries" [value]="country._id">{{ country.nombre }}</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <ion-item>
+                <ion-label>Ciudad</ion-label>
+                <ion-select [(ngModel)]="selectedCity" (ionChange)="onCityChange()" interface="popover" [disabled]="!selectedCountry">
+                  <ion-select-option [value]="null">Todas</ion-select-option>
+                  <ion-select-option *ngFor="let city of filteredCities" [value]="city._id">{{ city.nombre }}</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <ion-col size="12" size-md="6">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Sites</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-list>
+                <ion-item *ngIf="isLoading">
+                  <ion-label>Loading...</ion-label>
+                  <ion-spinner name="dots"></ion-spinner>
+                </ion-item>
+
+                <ion-item *ngIf="!isLoading && filteredSites.length === 0">
+                  <ion-label>No sites found</ion-label>
+                </ion-item>
+
+                <ion-item *ngFor="let site of filteredSites">
+                  <ion-label>
+                    <h2>{{ site.nombre }}</h2>
+                    <p>City: {{ getCityName(site.ciudad._id) }}</p>
+                    <p>Category: {{ site.tipoSitio }}</p>
+                    <p>Location: {{ site.ubicacion }}</p>
+                  </ion-label>
+                  <ion-buttons slot="end">
+                    <ion-button (click)="editItem(site)">
+                      <ion-icon name="create-outline"></ion-icon>
+                    </ion-button>
+                    <ion-button (click)="confirmDelete(site)">
+                      <ion-icon name="trash-outline"></ion-icon>
+                    </ion-button>
+                  </ion-buttons>
+                </ion-item>
+              </ion-list>
+
+              <ion-button expand="block" (click)="loadItems()" [disabled]="isLoading">
+                <ion-icon name="refresh-outline"></ion-icon>
+                Refresh
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</div>
